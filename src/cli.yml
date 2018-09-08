@@ -1,0 +1,33 @@
+name: Korean Number Practice
+version: "0.1"
+about: |
+  Copyright (C) 2018 Andrew Zah
+  This program comes with ABSOLUTELY NO WARRANTY.
+  This is free software, and you are welcome to redistribute it
+  under certain conditions.
+
+  This is a utility to practice using Korean numbers- both Sino-Korean and Pure Korean are supported.
+  There are two modes, random and study. Random generates random numbers within a range, study accepts an integer input and converts it to Korean for learning purposes.
+  
+args:
+  - korean:
+      short: k
+      long: korean
+      help: "Generate pure korean numbers in random mode."
+  - sino-korean:
+      short: s
+      long: sino-korean
+      help: "Generate sino-korean numbers in random mode."
+  - low:
+      short: l
+      long: low
+      help: "Lowest bound for number range."
+  - high:
+      short: h
+      long: high
+      help: "Highest bound for number range."
+  - numbers:
+      help: "Non-interactive. Will convert all numbers and quit."
+      multiple: true
+      takes_value: true
+      index: 1
