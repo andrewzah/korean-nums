@@ -36,12 +36,13 @@ impl Group {
             3 => Some(Group::Hundred),
             4 => Some(Group::Thousand),
             5 => Some(Group::TenThousand),
-            6 => Some(Group::TenTenThousand),
-            7 => Some(Group::HundredTenThousand),
-            8 => Some(Group::ThousandTenThousand),
-            9 => Some(Group::HundredMillion),
-            10 => Some(Group::TenHundredMillion),
-            11 => Some(Group::HundredHundredMillion),
+            6 => Some(Group::TenThousand),
+            7 => Some(Group::TenTenThousand),
+            8 => Some(Group::HundredTenThousand),
+            9 => Some(Group::ThousandTenThousand),
+            10 => Some(Group::HundredMillion),
+            11 => Some(Group::TenHundredMillion),
+            12 => Some(Group::HundredHundredMillion),
             _ => None
         }
     }

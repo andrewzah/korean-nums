@@ -69,7 +69,7 @@ impl Number {
 
     pub fn to_str_sino(&self) -> Option<&str> {
         match self {
-            &Number::Zero => Some("<0>"),
+            &Number::Zero => Some(""),
             &Number::One => Some("일"),
             &Number::Two => Some("이"),
             &Number::Three => Some("삼"),

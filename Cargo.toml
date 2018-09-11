@@ -1,8 +1,17 @@
 [package]
-name = "korean-nums"
+name = "korean_nums"
 version = "0.1.0"
 authors = ["Andrew Zah <zah@andrewzah.com>"]
 
 [dependencies]
 clap = {version = "2.32.0", features = ["yaml"] }
 rand = "0.5.5"
+
+
+[lib]
+name = "korean_nums"
+path = "src/lib.rs"
+
+[[bin]]
+name = "korean_nums"
+path = "src/main.rs"
