@@ -2,6 +2,7 @@
 extern crate clap;
 extern crate rand;
 extern crate korean_nums;
+
 use clap::App;
 
 use korean_nums::{str_to_vec_string, u32_to_vec_string, calculate};
