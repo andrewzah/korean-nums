@@ -2,7 +2,7 @@ pub enum Position {
     Empty,
     Tens,
     Hundreds,
-    Thousands
+    Thousands,
 }
 
 pub enum Block {
@@ -10,7 +10,7 @@ pub enum Block {
     Man,
     Eok,
     Jo,
-    Kyeong
+    Kyeong,
 }
 
 impl Position {

@@ -1,5 +1,5 @@
-mod number;
 mod counter;
+mod number;
 
 pub fn calculate(numbers: Vec<String>) -> String {
     let len = numbers.len();
@@ -18,16 +18,16 @@ pub fn calculate(numbers: Vec<String>) -> String {
         output.push_str(num.to_str_sino().unwrap());
 
         if idx > 0 {
-            let next = numbers.get(idx-1).unwrap().as_str();
-            if  next != "0" && number != "0" {
+            let next = numbers.get(idx - 1).unwrap().as_str();
+            if next != "0" && number != "0" {
                 let position_counter = counter::Position::from_usize(modulo).unwrap();
                 output.push_str(position_counter.as_str());
             }
         }
 
-         // problem: checking ahead for blocks
-         // need to grab as big of chunks ahead, larger than 4
-         // terminate if len of zeroes == len of idx->string end
+        // problem: checking ahead for blocks
+        // need to grab as big of chunks ahead, larger than 4
+        // terminate if len of zeroes == len of idx->string end
         if modulo == 0 && idx != 0 {
             let mut zeroes = String::new();
             let mut iter = numbers[..idx].iter();
@@ -36,10 +36,15 @@ pub fn calculate(numbers: Vec<String>) -> String {
                     zeroes.push_str(zero);
                 }
             }
-            println!("numbers_len: {}, zeroes_len: {}, zeroes: {}", len, zeroes.len(), zeroes);
-            let slice = numbers[(idx-4)..idx].join("");
+            println!(
+                "numbers_len: {}, zeroes_len: {}, zeroes: {}",
+                len,
+                zeroes.len(),
+                zeroes
+            );
+            let slice = numbers[(idx - 4)..idx].join("");
             println!("current_index: {}, slice: {}", idx, &slice);
-            if  slice == (0..(idx/4)).map(|_| "0").collect::<String>() {
+            if slice == (0..(idx / 4)).map(|_| "0").collect::<String>() {
                 println!("current_index: {}", idx);
 
                 let block_counter = counter::Block::from_index(idx).unwrap();
@@ -55,10 +60,7 @@ pub fn calculate(numbers: Vec<String>) -> String {
 }
 
 pub fn str_to_vec_string(s: &str) -> Vec<String> {
-    s
-        .chars()
-        .map(|c| c.to_string())
-        .collect()
+    s.chars().map(|c| c.to_string()).collect()
 }
 
 pub fn i32_to_vec_string(num: i32) -> Vec<String> {
@@ -68,4 +70,3 @@ pub fn i32_to_vec_string(num: i32) -> Vec<String> {
 pub fn u32_to_vec_string(num: u32) -> Vec<String> {
     str_to_vec_string(&num.to_string())
 }
-
