@@ -1,11 +1,11 @@
 #[macro_use]
 extern crate clap;
-extern crate rand;
 extern crate korean_nums;
+extern crate rand;
 
 use clap::App;
 
-use korean_nums::{str_to_vec_string, u32_to_vec_string, calculate};
+use korean_nums::{calculate, str_to_vec_string, u32_to_vec_string};
 
 fn main() {
     let yaml = load_yaml!("cli.yml");
@@ -15,12 +15,10 @@ fn main() {
         for num in numbers {
             println!("{}", calculate(str_to_vec_string(num)));
         }
-    }
-    else {
+    } else {
         let strings = u32_to_vec_string(rand::random::<u32>());
 
         println!("{}", strings.join(""));
         println!("{}", calculate(strings));
     }
 }
-

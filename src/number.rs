@@ -16,7 +16,7 @@ pub enum Number {
     Thirty,
     Forty,
     Fifty,
-    Sixty
+    Sixty,
 }
 
 impl fmt::Display for Number {
@@ -43,7 +43,7 @@ impl Number {
             "40" => Some(Number::Forty),
             "50" => Some(Number::Fifty),
             "60" => Some(Number::Sixty),
-            _ => None
+            _ => None,
         }
     }
 
@@ -79,7 +79,7 @@ impl Number {
             &Number::Seven => Some("칠"),
             &Number::Eight => Some("팔"),
             &Number::Nine => Some("구"),
-            _ => None
+            _ => None,
         }
     }
 
@@ -95,7 +95,7 @@ impl Number {
             &Number::Seven => Some("일곱"),
             &Number::Eight => Some("여덟"),
             &Number::Nine => Some("아홉"),
-            _ => None
+            _ => None,
         }
     }
 
@@ -105,8 +105,7 @@ impl Number {
             &Number::Two => Some("두"),
             &Number::Three => Some("세"),
             &Number::Four => Some("네"),
-            _ => None
+            _ => None,
         }
     }
 }
-

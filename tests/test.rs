@@ -65,13 +65,22 @@ fn it_calculates_seven_digits_correctly() {
 #[test]
 fn it_calculates_eight_digits_correctly() {
     let strings = str_to_vec_string("12345678");
-    assert_eq!("천이백삼십사만 오천육백칠십팔", &calculate(strings));
+    assert_eq!(
+        "천이백삼십사만 오천육백칠십팔",
+        &calculate(strings)
+    );
 
     let strings = str_to_vec_string("53565453");
-    assert_eq!("오천삼백오십육만 오천사백오십삼", &calculate(strings));
+    assert_eq!(
+        "오천삼백오십육만 오천사백오십삼",
+        &calculate(strings)
+    );
 
     let strings = str_to_vec_string("99999999");
-    assert_eq!("구천구백구십구만 구천구백구십구", &calculate(strings));
+    assert_eq!(
+        "구천구백구십구만 구천구백구십구",
+        &calculate(strings)
+    );
 }
 
 #[test]
@@ -83,22 +92,34 @@ fn it_calculates_nine_digits_correctly() {
 #[test]
 fn it_calculates_ten_digits_correctly() {
     let strings = str_to_vec_string("1234567891");
-    assert_eq!("십이억 삼천사백오십육만 칠천팔백구십일", &calculate(strings));
+    assert_eq!(
+        "십이억 삼천사백오십육만 칠천팔백구십일",
+        &calculate(strings)
+    );
 }
 
 #[test]
 fn it_calculates_eleven_digits_correctly() {
     let strings = str_to_vec_string("12345678912");
-    assert_eq!("백이십삼억 사천오백육십칠만 팔천구백십이", &calculate(strings));
+    assert_eq!(
+        "백이십삼억 사천오백육십칠만 팔천구백십이",
+        &calculate(strings)
+    );
 }
 
 #[test]
 fn it_calculates_twelve_digits_correctly() {
     let strings = str_to_vec_string("123456789123");
-    assert_eq!("천이백삼십사억 오천육백칠십팔만 구천백이십삼", &calculate(strings));
+    assert_eq!(
+        "천이백삼십사억 오천육백칠십팔만 구천백이십삼",
+        &calculate(strings)
+    );
 
     let strings = str_to_vec_string("999999999999");
-    assert_eq!("구천구백구십구억 구천구백구십구만 구천구백구십구", &calculate(strings));
+    assert_eq!(
+        "구천구백구십구억 구천구백구십구만 구천구백구십구",
+        &calculate(strings)
+    );
 }
 
 // 1 trillion
@@ -108,22 +129,34 @@ fn it_calculates_thirteen_digits_correctly() {
     assert_eq!("일조", &calculate(strings));
 
     let strings = str_to_vec_string("1234567891234");
-    assert_eq!("일조 이천삼백사십오억 육천칠백팔십구만 천이백삼십사", &calculate(strings));
+    assert_eq!(
+        "일조 이천삼백사십오억 육천칠백팔십구만 천이백삼십사",
+        &calculate(strings)
+    );
 
     let strings = str_to_vec_string("3543454632455");
-    assert_eq!("삼조 오천사백삼십사억 오천사백육십삼만 이천사백오십오", &calculate(strings));
+    assert_eq!(
+        "삼조 오천사백삼십사억 오천사백육십삼만 이천사백오십오",
+        &calculate(strings)
+    );
 }
 
 #[test]
 fn it_calculates_fourteen_digits_correctly() {
     let strings = str_to_vec_string("12345678912345");
-    assert_eq!("십이조 삼천사백오십육억 칠천팔백구십일만 이천삼백사십오", &calculate(strings));
+    assert_eq!(
+        "십이조 삼천사백오십육억 칠천팔백구십일만 이천삼백사십오",
+        &calculate(strings)
+    );
 }
 
 #[test]
 fn it_calculates_fifteen_digits_correctly() {
     let strings = str_to_vec_string("123456789123456");
-    assert_eq!("백이십삼조 사천오백육십칠억 팔천구백십이만 삼천사백오십육", &calculate(strings));
+    assert_eq!(
+        "백이십삼조 사천오백육십칠억 팔천구백십이만 삼천사백오십육",
+        &calculate(strings)
+    );
 }
 
 #[test]
