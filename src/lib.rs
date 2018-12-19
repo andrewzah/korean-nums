@@ -1,57 +1,55 @@
 mod number;
-mod counter;
+mod place;
+mod block;
+
+use number::*;
+use place::*;
+use block::*;
+use std::cmp;
 
 pub fn calculate(numbers: Vec<String>) -> String {
-    let len = numbers.len();
+    let len = numbers.len() - 1;
     let mut output = String::from("");
-    let mut output2 = String::from("");
+    //let iter = numbers.iter().rev().peekable();
 
-    let mut iter = numbers.iter().rev().peekable();
-    let mut i = len;
+    for (idx, number) in numbers.iter().enumerate() {
+        let remaining = len - idx;
+        let block_len = cmp::min(remaining, 3);
+        let num = Number::from_str(number).unwrap();
 
-    for (i, number) in numbers.iter().enumerate() {
-        let idx = len - i - 1;
+        if block_len != 0 {
+            let block_slice = &numbers[idx+1..idx+block_len];
+            if num == 0 && block_slice.iter().any(|x| x != "0") {
+                continue;
+            }
+        }
 
         let modulo = idx % 4;
-        let num = number::Number::from_str(number).unwrap();
 
-        output.push_str(num.to_str_sino().unwrap());
+        if modulo != 0 {
+            let place = Place::from_usize(modulo).unwrap();
+            output.push_str(place.to_str());
 
-        if idx > 0 {
-            let next = numbers.get(idx-1).unwrap().as_str();
-            if  next != "0" && number != "0" {
-                let position_counter = counter::Position::from_usize(modulo).unwrap();
-                output.push_str(position_counter.as_str());
+            if num != 1 {
+                output.push_str(num.to_str_sino());
             }
         }
 
-         // problem: checking ahead for blocks
-         // need to grab as big of chunks ahead, larger than 4
-         // terminate if len of zeroes == len of idx->string end
-        if modulo == 0 && idx != 0 {
-            let mut zeroes = String::new();
-            let mut iter = numbers[..idx].iter();
-            while let Some(zero) = iter.next() {
-                if zero == "0" {
-                    zeroes.push_str(zero);
+        if modulo == 0 {
+            if idx != 0 {
+                let block = Block::from_usize(idx)
+                    .expect("Block counter doesn't go high enough for this...");
+                output.push_str(block.to_str());
+                if num != 1 || remaining > 0 {
+                    output.push_str(num.to_str_sino());
                 }
-            }
-            println!("numbers_len: {}, zeroes_len: {}, zeroes: {}", len, zeroes.len(), zeroes);
-            let slice = numbers[(idx-4)..idx].join("");
-            println!("current_index: {}, slice: {}", idx, &slice);
-            if  slice == (0..(idx/4)).map(|_| "0").collect::<String>() {
-                println!("current_index: {}", idx);
-
-                let block_counter = counter::Block::from_index(idx).unwrap();
-
-                output.push_str(block_counter.as_str());
-                output.push_str(" ");
+            } else {
+                output.push_str(num.to_str_sino());
             }
         }
-        println!("curr_output: {}", &output);
     }
 
-    output
+    output.chars().rev().collect::<String>()
 }
 
 pub fn str_to_vec_string(s: &str) -> Vec<String> {
@@ -69,3 +67,12 @@ pub fn u32_to_vec_string(num: u32) -> Vec<String> {
     str_to_vec_string(&num.to_string())
 }
 
+pub fn strip_string(s: &str) -> String {
+    s.replace(",", "")
+}
+
+pub fn parse_string(s: &str) -> Vec<String> {
+    let mut vec = str_to_vec_string(&strip_string(s));
+    vec.reverse();
+    vec
+}

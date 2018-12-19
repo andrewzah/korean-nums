@@ -25,6 +25,12 @@ impl fmt::Display for Number {
     }
 }
 
+impl PartialEq<i32> for Number {
+    fn eq(&self, other: &i32) -> bool {
+        self.to_i32().eq(other)
+    }
+}
+
 impl Number {
     pub fn from_str(s: &str) -> Option<Number> {
         match s {
@@ -67,22 +73,22 @@ impl Number {
         }
     }
 
-    pub fn to_str_sino(&self) -> Option<&str> {
+    pub fn to_str_sino(&self) -> &str {
         match self {
-            &Number::Zero => Some(""),
-            &Number::One => Some("일"),
-            &Number::Two => Some("이"),
-            &Number::Three => Some("삼"),
-            &Number::Four => Some("사"),
-            &Number::Five => Some("오"),
-            &Number::Six => Some("육"),
-            &Number::Seven => Some("칠"),
-            &Number::Eight => Some("팔"),
-            &Number::Nine => Some("구"),
-            _ => None
+            &Number::One => "일",
+            &Number::Two => "이",
+            &Number::Three => "삼",
+            &Number::Four => "사",
+            &Number::Five => "오",
+            &Number::Six => "육",
+            &Number::Seven => "칠",
+            &Number::Eight => "팔",
+            &Number::Nine => "구",
+            _ => ""
         }
     }
 
+    #[allow(dead_code)]
     pub fn to_str_pure(&self) -> Option<&str> {
         match self {
             &Number::Zero => Some("<0>"),
@@ -99,6 +105,7 @@ impl Number {
         }
     }
 
+    #[allow(dead_code)]
     fn to_str_pure_conjugate(&self) -> Option<&str> {
         match self {
             &Number::One => Some("한"),

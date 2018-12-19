@@ -5,7 +5,7 @@ extern crate korean_nums;
 
 use clap::App;
 
-use korean_nums::{str_to_vec_string, u32_to_vec_string, calculate};
+use korean_nums::*;
 
 fn main() {
     let yaml = load_yaml!("cli.yml");
@@ -13,7 +13,8 @@ fn main() {
 
     if let Some(numbers) = matches.values_of("numbers") {
         for num in numbers {
-            println!("{}", calculate(str_to_vec_string(num)));
+            println!("{}", num);
+            println!("{}", calculate(parse_string(num)));
         }
     }
     else {
