@@ -3,6 +3,17 @@ name = "korean_numbers"
 version = "0.4.0"
 authors = ["Andrew Zah <zah@andrewzah.com>"]
 edition = "2018"
+license = "Apache-2.0"
+keywords = ["korean", "hangul"]
+categories = ["internationalization"]
+repository = "https://git.andrewzah.com/andrei/korean-nums"
+homepage = "https://git.andrewzah.com/andrei/korean-nums"
+description = '''
+This parses a string of integers into hangul.
+Example: 
+  90,000 -> 구만
+  8300,0000 -> 팔천삼백만
+'''
 
 [dependencies]
 itertools = "0.8.0"
