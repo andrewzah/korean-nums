@@ -1,6 +1,7 @@
 use std::fmt;
 
 // Numbers that have their own specific names.
+#[allow(dead_code)]
 pub enum Number {
     Zero,
     One,
@@ -12,11 +13,15 @@ pub enum Number {
     Seven,
     Eight,
     Nine,
+    Ten,
     Twenty,
     Thirty,
     Forty,
     Fifty,
-    Sixty
+    Sixty,
+    Seventy,
+    Eighty,
+    Ninety,
 }
 
 impl fmt::Display for Number {
@@ -53,6 +58,7 @@ impl Number {
         }
     }
 
+    #[allow(dead_code)]
     pub fn to_i32(&self) -> i32 {
         match self {
             &Number::Zero => 0,
@@ -65,16 +71,21 @@ impl Number {
             &Number::Seven => 7,
             &Number::Eight => 8,
             &Number::Nine => 9,
+            &Number::Ten => 20,
             &Number::Twenty => 20,
             &Number::Thirty => 30,
             &Number::Forty => 40,
             &Number::Fifty => 50,
             &Number::Sixty => 60,
+            &Number::Seventy => 70,
+            &Number::Eighty => 80,
+            &Number::Ninety => 80,
         }
     }
 
     pub fn to_str_sino(&self) -> &str {
         match self {
+            &Number::Zero => "공",
             &Number::One => "일",
             &Number::Two => "이",
             &Number::Three => "삼",
@@ -91,7 +102,7 @@ impl Number {
     #[allow(dead_code)]
     pub fn to_str_pure(&self) -> Option<&str> {
         match self {
-            &Number::Zero => Some("<0>"),
+            &Number::Zero => None,
             &Number::One => Some("하나"),
             &Number::Two => Some("둘"),
             &Number::Three => Some("셋"),
@@ -101,18 +112,15 @@ impl Number {
             &Number::Seven => Some("일곱"),
             &Number::Eight => Some("여덟"),
             &Number::Nine => Some("아홉"),
-            _ => None
-        }
-    }
-
-    #[allow(dead_code)]
-    fn to_str_pure_conjugate(&self) -> Option<&str> {
-        match self {
-            &Number::One => Some("한"),
-            &Number::Two => Some("두"),
-            &Number::Three => Some("세"),
-            &Number::Four => Some("네"),
-            _ => None
+            &Number::Ten => Some("열"),
+            &Number::Twenty => Some("스무"),
+            &Number::Thirty => Some("서른"),
+            &Number::Forty => Some("마흔"),
+            &Number::Fifty => Some("쉰"),
+            &Number::Sixty => Some("예순"),
+            &Number::Seventy => Some("일흔"),
+            &Number::Eighty => Some("여든"),
+            &Number::Ninety => Some("아흔"),
         }
     }
 }

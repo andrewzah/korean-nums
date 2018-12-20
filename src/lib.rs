@@ -12,20 +12,27 @@ pub fn calculate(numbers: Vec<String>) -> String {
     let mut output = String::from("");
     let mut iter = numbers.iter().enumerate();
 
-    while let Some((idx, number)) = iter.next() {
+    while let Some((idx, input_num)) = iter.next() {
         let remaining = len - idx;
         let min_peek_len = cmp::min(remaining, 3);
-        let num = Number::from_str(number).unwrap();
+        let mut num = Number::from_str(input_num).unwrap();
 
         if min_peek_len != 0 && num == 0 {
             let mut zeroes = 1;
-            while let Some((_, number)) = iter.next() {
-                if number != "0" { break; }
+            while let Some((_, next_num)) = iter.next() {
+                if next_num != "0" {
+                    num = Number::from_str(next_num).unwrap();
+                    break;
+                }
                 zeroes += 1;
             }
+
             if let Some(block) = Block::from_usize(zeroes) {
                 output.push_str(block.to_str_no_space());
-                return output.chars().rev().collect::<String>()
+                if num != 1 {
+                    output.push_str(num.to_str_sino());
+                }
+                continue;
             } else {
                 let zmod = zeroes % 4;
                 if zeroes >= 4 {
@@ -34,7 +41,9 @@ pub fn calculate(numbers: Vec<String>) -> String {
                 }
                 let place = Place::from_usize(zeroes % 4).unwrap();
                 output.push_str(place.to_str());
-
+                if num != 1 {
+                    output.push_str(num.to_str_sino());
+                }
                 continue;
             }
         }

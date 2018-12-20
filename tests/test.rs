@@ -21,11 +21,16 @@ fn it_handles_one_hundred_twenty_thousand() {
     let strings = parse_string("120,000");
     assert_eq!("십이만", &calculate(strings));
 }
+#[test]
+fn it_handles_eighty_million() {
+    let strings = parse_string("83,000,000");
+    assert_eq!("팔천삼백만", &calculate(strings));
+}
 
 #[test]
-fn it_handles_forty_six_million() {
-    let strings = parse_string("46,000,000");
-    assert_eq!("사십육천만", &calculate(strings));
+fn it_handles_eighty_three_million_seven_fiftytwo_thousand() {
+    let strings = parse_string("83,752,000");
+    assert_eq!("팔천삼백칠십오만 이천", &calculate(strings));
 }
 
 // <num> digits
