@@ -1,14 +1,16 @@
 extern crate korean_nums;
 
-use korean_nums::hangul_from_int;
+use korean_nums::{hangeul_from_int, hangeul_from_bigint};
+use num::{pow, BigInt};
 
 // -----------
 // Pure Korean
 // -----------
 
 #[test]
-fn it_handles_one_through_nine_korean() {
+fn it_handles_zero_through_nine_korean() {
     let testcases: Vec<(i8, &str)> = vec![
+        (0, "공"),
         (1, "하나"),
         (2, "둘"),
         (3, "셋"),
@@ -21,7 +23,7 @@ fn it_handles_one_through_nine_korean() {
     ];
 
     for (input, expected) in testcases {
-        assert_eq!(expected, hangul_from_int(input, false));
+        assert_eq!(expected, hangeul_from_int(input, false));
     }
 }
 
@@ -121,7 +123,7 @@ fn it_handles_ten_through_ninety_nine_pure() {
     ];
 
     for (input, expected) in testcases {
-        assert_eq!(expected, hangul_from_int(input, false));
+        assert_eq!(expected, hangeul_from_int(input, false));
     }
 }
 
@@ -142,7 +144,7 @@ fn it_handles_mixed_digits_zeroes_sino() {
     ];
 
     for &(input, expected) in testcases.iter() {
-        assert_eq!(expected, hangul_from_int(input, true));
+        assert_eq!(expected, hangeul_from_int(input, true));
     }
 }
 
@@ -172,7 +174,7 @@ fn it_handles_digits_sino(){
     ];
 
     for (input, expected) in testcases {
-        assert_eq!(expected, hangul_from_int(input, true));
+        assert_eq!(expected, hangeul_from_int(input, true));
     }
 }
 
@@ -187,25 +189,62 @@ fn it_handles_zeroes_sino() {
         ("백만" ,  100_0000),
         ("천만" ,  1000_0000),
         ("억"   ,  1_0000_0000),
-        ("십억" ,  10_0000_0000),
-        ("백억" ,  100_0000_0000),
-        ("천억" ,  1000_0000_0000),
-        ("조"   ,  1_0000_0000_0000),
-        ("십조" ,  10_0000_0000_0000),
-        ("백조" ,  100_0000_0000_0000),
-        ("천조" ,  1000_0000_0000_0000),
-        ("경"   ,  1_0000_0000_0000_0000),
-        ("십경" ,  10_0000_0000_0000_0000),
-        ("백경" ,  100_0000_0000_0000_0000),
-        ("천경" ,  1000_0000_0000_0000_0000),
-        ("해"   ,  1_0000_0000_0000_0000_0000),
-        ("십해" ,  10_0000_0000_0000_0000_0000),
-        ("백해" ,  100_0000_0000_0000_0000_0000),
-        ("천해" ,  1000_0000_0000_0000_0000_0000),
-        ("자"   ,  1_0000_0000_0000_0000_0000_0000),
+        ("십억" ,  pow(10u128, 9)),
+        ("백억" ,  pow(10u128, 10)),
+        ("천억" ,  pow(10u128, 11)),
+        ("조"   ,  pow(10u128, 12)),
+        ("십조" ,  pow(10u128, 13)),
+        ("백조" ,  pow(10u128, 14)),
+        ("천조" ,  pow(10u128, 15)),
+        ("경"   ,  pow(10u128, 16)),
+        ("십경" ,  pow(10u128, 17)),
+        ("백경" ,  pow(10u128, 18)),
+        ("천경" ,  pow(10u128, 19)),
+        ("해"   ,  pow(10u128, 20)),
+        ("십해" ,  pow(10u128, 21)),
+        ("백해" ,  pow(10u128, 22)),
+        ("천해" ,  pow(10u128, 23)),
+        ("자"   ,  pow(10u128, 24)),
+        ("십자" ,  pow(10u128, 25)),
+        ("백자" ,  pow(10u128, 26)),
+        ("천자" ,  pow(10u128, 27)),
+        ("양"   ,  pow(10u128, 28)),
+        ("십양" ,  pow(10u128, 29)),
+        ("백양" ,  pow(10u128, 30)),
+        ("천양" ,  pow(10u128, 31)),
+        ("구"   ,  pow(10u128, 32)),
+        ("십구" ,  pow(10u128, 33)),
+        ("백구" ,  pow(10u128, 34)),
+        ("천구" ,  pow(10u128, 35)),
+        ("간"   ,  pow(10u128, 36)),
+        ("십간" ,  pow(10u128, 37)),
+        ("백간" ,  pow(10u128, 38)),
     ];
 
     for (expected, input) in testcases {
-        assert_eq!(expected, hangul_from_int(input, true));
+        assert_eq!(expected, hangeul_from_int(input, true));
+    }
+}
+
+#[test]
+fn it_handles_big_zeroes_sino() {
+    let testcases: Vec<(&str, BigInt)> = vec![
+        ("천간" , pow(BigInt::from(10), 39)),
+        ("정"   , pow(BigInt::from(10), 40)),
+        ("십정" , pow(BigInt::from(10), 41)),
+        ("백정" , pow(BigInt::from(10), 42)),
+        ("천정" , pow(BigInt::from(10), 43)),
+        ("재"   , pow(BigInt::from(10), 44)),
+        ("십재" , pow(BigInt::from(10), 45)),
+        ("백재" , pow(BigInt::from(10), 46)),
+        ("천재" , pow(BigInt::from(10), 47)),
+        ("극"   , pow(BigInt::from(10), 48)),
+        ("십극" , pow(BigInt::from(10), 49)),
+        ("백극" , pow(BigInt::from(10), 50)),
+        ("천극" , pow(BigInt::from(10), 51)),
+    ];
+
+    for (expected, input) in testcases {
+        assert_eq!(expected, hangeul_from_bigint(input));
     }
 }

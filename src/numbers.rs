@@ -142,7 +142,7 @@ impl KoreanNumberPure {
 
     pub fn to_str(&self) -> &str {
         match self {
-            &KoreanNumberPure::Zero => "영/제로",
+            &KoreanNumberPure::Zero => "공",
             &KoreanNumberPure::One => "하나",
             &KoreanNumberPure::Two => "둘",
             &KoreanNumberPure::Three => "셋",

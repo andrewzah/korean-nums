@@ -6,24 +6,61 @@ mod block;
 
 use std::cmp::{min};
 use std::cmp::Ord;
-use num::{FromPrimitive, PrimInt};
+use num::{BigInt, FromPrimitive, PrimInt};
 
-pub fn hangul_from_string(input: String, is_sino: bool) -> String {
-    hangul_from_int(input.parse::<u64>().unwrap(), is_sino)
-}
-
-pub fn hangul_from_int<T>(input: T, is_sino: bool) -> String
+/// Parses an int into a Hangeul String.
+///
+/// ```md
+/// Args:
+/// *input* - Any {integer}.
+/// *is_sino* - true  => parse as a Sino-Korean number.
+///             false => parse as a Pure-Korean number.
+/// ```
+pub fn hangeul_from_int<T>(input: T, is_sino: bool) -> String
     where T: PrimInt + ToString + FromPrimitive
 {
-    validate_sino(input, is_sino);
+    validate(input, is_sino);
     let prepared_input = prepare_input(input);
     match is_sino {
-        true => parse_hangul_sino(prepared_input),
-        false => parse_hangul_pure(prepared_input),
+        true => parse_hangeul_sino(prepared_input),
+        false => parse_hangeul_pure(prepared_input),
     }
 }
 
-fn validate_sino<T>(input: T, is_sino: bool)
+/// Parses an int String into a Hangeul String.
+///
+/// ```md
+/// Args:
+/// *input* - A String that can be parsed to an {integer}.
+/// *is_sino* - true  => parse as a Sino-Korean number.
+///             false => parse as a Pure-Korean number.
+/// ```
+pub fn hangeul_from_string(input: String, is_sino: bool) -> String {
+    hangeul_from_int(input.parse::<u64>().unwrap(), is_sino)
+}
+
+/// Parses a BigInt into a Hangeul String.
+///
+/// ```md
+/// Args:
+/// *input* - A BigInt.
+/// ```
+pub fn hangeul_from_bigint(input: BigInt) -> String
+{
+    if input < FromPrimitive::from_i8(0).unwrap() {
+        panic!("Input cannot be negative.")
+    }
+    let prepared_input = input
+        .to_string()
+        .replace(",", "")
+        .chars()
+        .rev()
+        .collect();
+
+    parse_hangeul_sino(prepared_input)
+}
+
+fn validate<T>(input: T, is_sino: bool)
     where T: PrimInt + ToString + FromPrimitive
 {
     if is_sino == false && input > FromPrimitive::from_u64(99).unwrap() {
@@ -47,7 +84,7 @@ fn prepare_input<T>(input: T) -> Vec<char>
     nums
 }
 
-fn parse_hangul_sino(numbers: Vec<char>) -> String {
+fn parse_hangeul_sino(numbers: Vec<char>) -> String {
     let len = numbers.len() - 1;
     let mut output = String::new();
     let mut iter = numbers.iter().enumerate();
@@ -116,20 +153,24 @@ fn parse_hangul_sino(numbers: Vec<char>) -> String {
     output.chars().rev().collect::<String>()
 }
 
-fn parse_hangul_pure(numbers: Vec<char>) -> String {
+fn parse_hangeul_pure(numbers: Vec<char>) -> String {
     let mut output = String::new();
     let mut iter = numbers.iter().enumerate().peekable();
 
-    println!("\nnumbers: {:?}", numbers);
     while let Some((idx, input_num)) = iter.next() {
         match (idx, input_num) {
             (0, '0') => {
-                let (_, next_num) = iter.next().unwrap();
-                let new_input = format!("{}{}", next_num, "0");
-                let num = numbers::KoreanNumberPure::from_str(&new_input).unwrap();
+                if let Some((_, next_num)) = iter.peek() {
+                    let new_input = format!("{}{}", next_num, "0");
+                    let num = numbers::KoreanNumberPure::from_str(&new_input).unwrap();
 
-                output.push_str(num.to_str());
-                return output;
+                    output.push_str(num.to_str());
+                    return output;
+                } else {
+                    let num = numbers::KoreanNumberPure::from_char(input_num).unwrap();
+                    output.push_str(num.to_str());
+                    return output;
+                }
             },
             (0, _) => {
                 if let Some((_, next_num)) = iter.peek() {
