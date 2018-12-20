@@ -98,6 +98,7 @@ Sino-Korean number support in this program goes up to 10^51:
 | 10^48 | 극 | 極 |
 
 Wikipedia lists even higher groupings, but at different exponents...
+
 | Power | Hangeul Grouping | Hanja |
 | :---: | :---: | :---: |
 | 10^52 or 10^56 | 항하사 | 恒河沙 |
