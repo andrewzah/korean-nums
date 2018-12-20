@@ -60,11 +60,12 @@ To show the tens place, the place word comes before the number.
 | Number | Hangeul | Literal |
 | :---: | :---: | :---: |
 | 1 | 하나 | `one` |
-| 10 | 열 | `one` |
+| 10 | 열 | `ten` |
 | 11 | 열하나 | `ten one` |
-| 20 | 열하나 | `ten one` |
-| 21 | 스물하나 | `ten one` |
+| 20 | 스물 | `twenty ` |
+| 21 | 스물하나 | `twenty one` |
 
+1, 2, 3, 4, and 20 can be conjugated as well. todo: add conjugation rules here
 
 ### Sino-Korean Numbers
 Adding a number before a place word like 십, 백, 천, 만, etc, multiplies it.
@@ -79,7 +80,7 @@ Adding a number after adds it.
 
 ---
 
-Sino-Korean number support goes up to 10^51:
+Sino-Korean number support in this program goes up to 10^51:
 
 | Power | Hangeul Grouping | Hanja |
 | :---: | :---: | :---: |
@@ -96,10 +97,27 @@ Sino-Korean number support goes up to 10^51:
 | 10^44 | 재 | 載 |
 | 10^48 | 극 | 極 |
 
+Wikipedia lists even higher groupings, but at different exponents...
+| Power | Hangeul Grouping | Hanja |
+| :---: | :---: | :---: |
+| 10^52 or 10^56 | 항하사 | 恒河沙 |
+| 10^56 or 10^64 | 아승기| 阿僧祇|
+| 10^60 or 10^72 | 나유타| 那由他|
+| 10^64 or 10^80 | 불가사의| 不可思議|
+| 10^68 or 10^88 | 무량대수| 無量大數|
+
 ### Counters
   -- see todo
 
+### Further Reading
+
+  0. [Korean Numbers](https://www.howtostudykorean.com/unit1/unit-1-lessons-9-16/unit-1-lesson-10/)
+  1. [Big Korean Numbers](https://www.howtostudykorean.com/unit-6/lessons-126-133/lesson130/)
+  2. [Wikipedia - Korean Numerals](https://en.wikipedia.org/wiki/Korean_numerals)
+  3. [Korean Numbers Reference](https://www.omniglot.com/language/numbers/korean.htm)
+
 ### Todo
+* add conjugations for pure korean numbers
 * Add counter enum and mappings
 * Add API fn to get a counter for a kind of term
 * Add counter information in README
