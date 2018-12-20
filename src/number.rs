@@ -2,8 +2,21 @@ use std::fmt;
 
 // Numbers that have their own specific names.
 #[allow(dead_code)]
-pub enum Number {
+pub enum SinoNumber {
     Zero,
+    One,
+    Two,
+    Three,
+    Four,
+    Five,
+    Six,
+    Seven,
+    Eight,
+    Nine,
+}
+
+#[allow(dead_code)]
+pub enum KoreanNumber {
     One,
     Two,
     Three,
@@ -24,7 +37,13 @@ pub enum Number {
     Ninety,
 }
 
-impl fmt::Display for Number {
+impl fmt::Display for SinoNumber {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.to_i32())
+    }
+}
+
+impl fmt::Display for PureNumber {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.to_i32())
     }
@@ -99,29 +118,8 @@ impl Number {
         }
     }
 
-    #[allow(dead_code)]
-    pub fn to_str_pure(&self) -> Option<&str> {
-        match self {
-            &Number::Zero => None,
-            &Number::One => Some("하나"),
-            &Number::Two => Some("둘"),
-            &Number::Three => Some("셋"),
-            &Number::Four => Some("넷"),
-            &Number::Five => Some("다섯"),
-            &Number::Six => Some("여섯"),
-            &Number::Seven => Some("일곱"),
-            &Number::Eight => Some("여덟"),
-            &Number::Nine => Some("아홉"),
-            &Number::Ten => Some("열"),
-            &Number::Twenty => Some("스무"),
-            &Number::Thirty => Some("서른"),
-            &Number::Forty => Some("마흔"),
-            &Number::Fifty => Some("쉰"),
-            &Number::Sixty => Some("예순"),
-            &Number::Seventy => Some("일흔"),
-            &Number::Eighty => Some("여든"),
-            &Number::Ninety => Some("아흔"),
-        }
-    }
+    pub fn to_hanja(&self) -> 
+
 }
+
 

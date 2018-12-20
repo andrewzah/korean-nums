@@ -1,239 +1,84 @@
 extern crate korean_nums;
 
-use korean_nums::*;
-
-// specific numbers
-#[test]
-fn it_handles_sino_one() {
-    let strings = parse_string("1");
-    assert_eq!("일", &calculate(strings));
-}
-
+use korean_nums::str_to_hangul;
 
 #[test]
-fn it_handles_one_hundred_twenty() {
-    let strings = parse_string("120");
-    assert_eq!("백이십", &calculate(strings));
-}
+fn it_handles_mixed_digits_zeroes() {
+    let testcases = vec![
+        ("1","일"),
+        ("120", "백이십"),
+        ("9,0000", "구만"),
+        ("9,9000", "구만 구천"),
+        ("12,0000", "십이만"),
+        ("8300,0000", "팔천삼백만"),
+        ("8375,2000", "팔천삼백칠십오만 이천"),
+    ];
 
-#[test]
-fn it_handles_one_hundred_twenty_thousand() {
-    let strings = parse_string("120,000");
-    assert_eq!("십이만", &calculate(strings));
-}
-#[test]
-fn it_handles_eighty_million() {
-    let strings = parse_string("83,000,000");
-    assert_eq!("팔천삼백만", &calculate(strings));
+    for (input, expected) in testcases {
+        assert_eq!(expected, str_to_hangul(input));
+    }
 }
 
 #[test]
-fn it_handles_eighty_three_million_seven_fiftytwo_thousand() {
-    let strings = parse_string("83,752,000");
-    assert_eq!("팔천삼백칠십오만 이천", &calculate(strings));
-}
+fn it_handles_digits(){
+    let testcases = vec![
+        ("4"                   ,  "사"),
+        ("12"                  ,  "십이"),
+        ("123"                 ,  "백이십삼"),
+        ("1234"                ,  "천이백삼십사"),
+        ("12,345"              ,  "만 이천삼백사십오"),
+        ("12,3456"             ,  "십이만 삼천사백오십육"),
+        ("123,4567"            ,  "백이십삼만 사천오백육십칠"),
+        ("1234,5678"           ,  "천이백삼십사만 오천육백칠십팔"),
+        ("5356,5453"           ,  "오천삼백오십육만 오천사백오십삼"),
+        ("9999,9999"           ,  "구천구백구십구만 구천구백구십구"),
+        ("12,3456,7891"        ,  "십이억 삼천사백오십육만 칠천팔백구십일"),
+        ("123,4567,8912"       ,  "백이십삼억 사천오백육십칠만 팔천구백십이"),
+        ("1234,5678,9123"      ,  "천이백삼십사억 오천육백칠십팔만 구천백이십삼"),
+        ("9999,9999,9999"      ,  "구천구백구십구억 구천구백구십구만 구천구백구십구"),
+        ("1,2345,6789,1234"    ,  "조 이천삼백사십오억 육천칠백팔십구만 천이백삼십사"),
+        ("3,5434,5463,2455"    ,  "삼조 오천사백삼십사억 오천사백육십삼만 이천사백오십오"),
+        ("12,3456,7891,2345"   ,  "십이조 삼천사백오십육억 칠천팔백구십일만 이천삼백사십오"),
+        ("123,4567,8912,3456"  ,  "백이십삼조 사천오백육십칠억 팔천구백십이만 삼천사백오십육"),
+        ("1234,5678,9123,4567" ,  "천이백삼십사조 오천육백칠십팔억 구천백이십삼만 사천오백육십칠"),
+        ("9999,9999,9999,9999" ,  "구천구백구십구조 구천구백구십구억 구천구백구십구만 구천구백구십구"),
+    ];
 
-// <num> digits
-#[test]
-fn it_handles_one_digit() {
-    let strings = parse_string("4");
-    assert_eq!("사", &calculate(strings));
-}
-
-#[test]
-fn it_handles_two_digits() {
-    let strings = parse_string("12");
-    assert_eq!("십이", &calculate(strings));
-}
-
-#[test]
-fn it_handles_three_digits() {
-    let strings = parse_string("123");
-    assert_eq!("백이십삼", &calculate(strings));
-}
-
-#[test]
-fn it_handles_four_digits() {
-    let strings = parse_string("1,234");
-    assert_eq!("천이백삼십사", &calculate(strings));
-}
-
-#[test]
-fn it_handles_five_digits() {
-    let strings = parse_string("12345");
-    assert_eq!("만 이천삼백사십오", &calculate(strings));
+    for (input, expected) in testcases {
+        assert_eq!(expected, str_to_hangul(input));
+    }
 }
 
 #[test]
-fn it_handles_six_digits() {
-    let strings = parse_string("123456");
-    assert_eq!("십이만 삼천사백오십육", &calculate(strings));
-}
+fn it_handles_zeroes() {
+    let testcases = vec![
+        ("십"   ,  "10"),
+        ("백"   ,  "100"),
+        ("천"   ,  "1000"),
+        ("만"   ,  "1,0000"),
+        ("십만" ,  "10,0000"),
+        ("백만" ,  "100,0000"),
+        ("천만" ,  "1000,0000"),
+        ("억"   ,  "1,0000,0000"),
+        ("십억" ,  "10,0000,0000"),
+        ("백억" ,  "100,0000,0000"),
+        ("천억" ,  "1000,0000,0000"),
+        ("조"   ,  "1,0000,0000,0000"),
+        ("십조" ,  "10,0000,0000,0000"),
+        ("백조" ,  "100,0000,0000,0000"),
+        ("천조" ,  "1000,0000,0000,0000"),
+        ("경"   ,  "1,0000,0000,0000,0000"),
+        ("십경" ,  "10,0000,0000,0000,0000"),
+        ("백경" ,  "100,0000,0000,0000,0000"),
+        ("천경" ,  "1000,0000,0000,0000,0000"),
+        ("해"   ,  "1,0000,0000,0000,0000,0000"),
+        ("십해" ,  "10,0000,0000,0000,0000,0000"),
+        ("백해" ,  "100,0000,0000,0000,0000,0000"),
+        ("천해" ,  "1000,0000,0000,0000,0000,0000"),
+        ("자"   ,  "1,0000,0000,0000,0000,0000,0000"),
+    ];
 
-#[test]
-fn it_handles_seven_digits() {
-    let strings = parse_string("1234567");
-    assert_eq!("백이십삼만 사천오백육십칠", &calculate(strings));
-}
-
-#[test]
-fn it_handles_eight_digits() {
-    let strings = parse_string("12345678");
-    assert_eq!("천이백삼십사만 오천육백칠십팔", &calculate(strings));
-
-    let strings = parse_string("53565453");
-    assert_eq!("오천삼백오십육만 오천사백오십삼", &calculate(strings));
-
-    let strings = parse_string("99999999");
-    assert_eq!("구천구백구십구만 구천구백구십구", &calculate(strings));
-}
-
-
-#[test]
-fn it_handles_ten_digits() {
-    let strings = parse_string("1234567891");
-    assert_eq!("십이억 삼천사백오십육만 칠천팔백구십일", &calculate(strings));
-}
-
-#[test]
-fn it_handles_eleven_digits() {
-    let strings = parse_string("12345678912");
-    assert_eq!("백이십삼억 사천오백육십칠만 팔천구백십이", &calculate(strings));
-}
-
-#[test]
-fn it_handles_twelve_digits() {
-    let strings = parse_string("123456789123");
-    assert_eq!("천이백삼십사억 오천육백칠십팔만 구천백이십삼", &calculate(strings));
-
-    let strings = parse_string("999999999999");
-    assert_eq!("구천구백구십구억 구천구백구십구만 구천구백구십구", &calculate(strings));
-}
-
-// 1 trillion
-#[test]
-fn it_handles_thirteen_digits() {
-    let strings = parse_string("1234567891234");
-    assert_eq!("조 이천삼백사십오억 육천칠백팔십구만 천이백삼십사", &calculate(strings));
-
-    let strings = parse_string("3543454632455");
-    assert_eq!("삼조 오천사백삼십사억 오천사백육십삼만 이천사백오십오", &calculate(strings));
-}
-
-#[test]
-fn it_handles_fourteen_digits() {
-    let strings = parse_string("12345678912345");
-    assert_eq!("십이조 삼천사백오십육억 칠천팔백구십일만 이천삼백사십오", &calculate(strings));
-}
-
-#[test]
-fn it_handles_fifteen_digits() {
-    let strings = parse_string("123456789123456");
-    assert_eq!("백이십삼조 사천오백육십칠억 팔천구백십이만 삼천사백오십육", &calculate(strings));
-}
-
-#[test]
-fn it_handles_sixteen_digits() {
-    let strings = parse_string("1234567891234567");
-    assert_eq!("천이백삼십사조 오천육백칠십팔억 구천백이십삼만 사천오백육십칠", &calculate(strings));
-
-    let strings = parse_string("9999999999999999");
-    assert_eq!("구천구백구십구조 구천구백구십구억 구천구백구십구만 구천구백구십구", &calculate(strings));
-}
-
-// zeroes
-#[test]
-fn it_handles_one_zero() {
-    let strings = parse_string("10");
-    assert_eq!("십", &calculate(strings));
-}
-
-#[test]
-fn it_handles_two_zeroes() {
-    let strings = parse_string("100");
-    assert_eq!("백", &calculate(strings));
-}
-
-#[test]
-fn it_handles_three_zeroes() {
-    let strings = parse_string("1,000");
-    assert_eq!("천", &calculate(strings));
-}
-
-#[test]
-fn it_handles_four_zeroes() {
-    let strings = parse_string("10,000");
-    assert_eq!("만", &calculate(strings));
-}
-
-#[test]
-fn it_handles_five_zeroes() {
-    let strings = parse_string("100,000");
-    assert_eq!("십만", &calculate(strings));
-}
-
-#[test]
-fn it_handles_six_zeroes() {
-    let strings = parse_string("1,000,000");
-    assert_eq!("백만", &calculate(strings));
-}
-
-#[test]
-fn it_handles_seven_zeroes() {
-    let strings = parse_string("10,000,000");
-    assert_eq!("천만", &calculate(strings));
-}
-
-#[test]
-fn it_handles_eight_zeroes() {
-    let strings = parse_string("100,000,000");
-    assert_eq!("억", &calculate(strings));
-}
-
-#[test]
-fn it_handles_nine_zeroes() {
-    let strings = parse_string("1,000,000,000");
-    assert_eq!("십억", &calculate(strings));
-}
-
-#[test]
-fn it_handles_ten_zeroes() {
-    let strings = parse_string("10,000,000,000");
-    assert_eq!("백억", &calculate(strings));
-}
-
-#[test]
-fn it_handles_eleven_zeroes() {
-    let strings = parse_string("100,000,000,000");
-    assert_eq!("천억", &calculate(strings));
-}
-
-#[test]
-fn it_handles_twelve_zeroes() {
-    let strings = parse_string("1,000,000,000,000");
-    assert_eq!("조", &calculate(strings));
-}
-
-#[test]
-fn it_handles_thirteen_zeroes() {
-    let strings = parse_string("10,000,000,000,000");
-    assert_eq!("십조", &calculate(strings));
-}
-
-#[test]
-fn it_handles_fourteen_zeroes() {
-    let strings = parse_string("100,000,000,000,000");
-    assert_eq!("백조", &calculate(strings));
-}
-
-#[test]
-fn it_handles_fifteen_zeroes() {
-    let strings = parse_string("1,000,000,000,000,000");
-    assert_eq!("천조", &calculate(strings));
-}
-
-#[test]
-fn it_handles_sixteen_zeroes() {
-    let strings = parse_string("10,000,000,000,000,000");
-    assert_eq!("경", &calculate(strings));
+    for (expected, input) in testcases {
+        assert_eq!(expected, str_to_hangul(input));
+    }
 }

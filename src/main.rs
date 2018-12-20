@@ -5,23 +5,23 @@ extern crate korean_nums;
 
 use clap::App;
 
-use korean_nums::*;
+use korean_nums::str_to_hangul;
 
 fn main() {
     let yaml = load_yaml!("cli.yml");
     let matches = App::from_yaml(yaml).get_matches();
 
-    if let Some(numbers) = matches.values_of("numbers") {
-        for num in numbers {
-            println!("{}", num);
-            println!("{}", calculate(parse_string(num)));
+    if let Some(inputs) = matches.values_of("numbers") {
+        for input in inputs {
+            println!("Handling {}.", input);
+            println!("->\t{}", str_to_hangul(input));
         }
     }
     else {
-        let strings = u32_to_vec_string(rand::random::<u32>());
+        let string = rand::random::<u32>()
+            .to_string();
 
-        println!("{}", strings.join(""));
-        println!("{}", calculate(strings));
+        println!("{}", str_to_hangul(&string));
     }
 }
 
