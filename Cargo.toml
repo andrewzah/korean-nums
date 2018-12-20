@@ -6,7 +6,7 @@ edition = "2018"
 license = "Apache-2.0"
 keywords = ["korean", "hangul"]
 categories = ["internationalization"]
-repository = "https://git.andrewzah.com/andrei/korean-nums"
+repository = "https://git.sr.ht/~andrewzah/korean_numbers"
 homepage = "https://git.andrewzah.com/andrei/korean-nums"
 readme = "README.md"
 description = '''
@@ -17,6 +17,7 @@ Currently only Sino-Korean parsing is supported.
 
 [dependencies]
 itertools = "0.8.0"
+num = "0.2.0"
 
 [lib]
 name = "korean_nums"
