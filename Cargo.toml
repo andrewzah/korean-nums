@@ -1,10 +1,10 @@
 [package]
 name = "korean_numbers"
-version = "0.4.2"
+version = "0.5.0"
 authors = ["Andrew Zah <zah@andrewzah.com>"]
 edition = "2018"
 license = "Apache-2.0"
-keywords = ["korean", "hangul"]
+keywords = ["korean", "hangeul", "libhangeul", "hangul"]
 categories = ["internationalization"]
 repository = "https://git.sr.ht/~andrewzah/korean_numbers"
 homepage = "https://git.andrewzah.com/andrei/korean-nums"
