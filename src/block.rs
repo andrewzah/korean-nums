@@ -24,4 +24,13 @@ impl Block {
             &Block::Kyeong => " 경",
         }
     }
+
+    pub fn to_str_no_space(&self) -> &str {
+        match self {
+            &Block::Man => "만",
+            &Block::Eok => "억",
+            &Block::Jo => "조",
+            &Block::Kyeong => "경",
+        }
+    }
 }

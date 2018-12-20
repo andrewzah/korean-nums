@@ -22,6 +22,12 @@ fn it_handles_one_hundred_twenty_thousand() {
     assert_eq!("십이만", &calculate(strings));
 }
 
+#[test]
+fn it_handles_forty_six_million() {
+    let strings = parse_string("46,000,000");
+    assert_eq!("사십육천만", &calculate(strings));
+}
+
 // <num> digits
 #[test]
 fn it_handles_one_digit() {

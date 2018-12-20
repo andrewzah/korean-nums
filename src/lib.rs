@@ -10,22 +10,36 @@ use std::cmp;
 pub fn calculate(numbers: Vec<String>) -> String {
     let len = numbers.len() - 1;
     let mut output = String::from("");
-    //let iter = numbers.iter().rev().peekable();
+    let mut iter = numbers.iter().enumerate();
 
-    for (idx, number) in numbers.iter().enumerate() {
+    while let Some((idx, number)) = iter.next() {
         let remaining = len - idx;
-        let block_len = cmp::min(remaining, 3);
+        let min_peek_len = cmp::min(remaining, 3);
         let num = Number::from_str(number).unwrap();
 
-        if block_len != 0 {
-            let block_slice = &numbers[idx+1..idx+block_len];
-            if num == 0 && block_slice.iter().any(|x| x != "0") {
+        if min_peek_len != 0 && num == 0 {
+            let mut zeroes = 1;
+            while let Some((_, number)) = iter.next() {
+                if number != "0" { break; }
+                zeroes += 1;
+            }
+            if let Some(block) = Block::from_usize(zeroes) {
+                output.push_str(block.to_str_no_space());
+                return output.chars().rev().collect::<String>()
+            } else {
+                let zmod = zeroes % 4;
+                if zeroes >= 4 {
+                    let block = Block::from_usize(zeroes - zmod).unwrap();
+                    output.push_str(block.to_str_no_space());
+                }
+                let place = Place::from_usize(zeroes % 4).unwrap();
+                output.push_str(place.to_str());
+
                 continue;
             }
         }
 
         let modulo = idx % 4;
-
         match modulo {
             1|2|3 => {
                 let place = Place::from_usize(modulo).unwrap();
