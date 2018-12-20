@@ -2,9 +2,10 @@
 
 ### Korean Numbers
 
-An integer to korean text parser.
+Converts a string to hangul output.
+
+Currently only supports Sino-Korean output.
 
 ### To-do
 
-- [ ] Pass basic tests for Sino-Korean numbers up to 1 quadrillion
-- [ ] Implement pure Korean numbers for 1-60 (99?)
+- [ ] Implement pure Korean numbers output
