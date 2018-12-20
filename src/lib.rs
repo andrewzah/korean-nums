@@ -26,25 +26,26 @@ pub fn calculate(numbers: Vec<String>) -> String {
 
         let modulo = idx % 4;
 
-        if modulo != 0 {
-            let place = Place::from_usize(modulo).unwrap();
-            output.push_str(place.to_str());
+        match modulo {
+            1|2|3 => {
+                let place = Place::from_usize(modulo).unwrap();
+                output.push_str(place.to_str());
 
-            if num != 1 {
-                output.push_str(num.to_str_sino());
-            }
-        }
-
-        if modulo == 0 {
-            if idx != 0 {
-                let block = Block::from_usize(idx)
-                    .expect("Block counter doesn't go high enough for this...");
-                output.push_str(block.to_str());
-                if num != 1 || remaining > 0 {
+                if num != 1 {
                     output.push_str(num.to_str_sino());
                 }
-            } else {
-                output.push_str(num.to_str_sino());
+            },
+            _ => {
+                if idx != 0 {
+                    let block = Block::from_usize(idx)
+                        .expect("Block counter doesn't go high enough for this...");
+                    output.push_str(block.to_str());
+                    if num != 1 || remaining > 0 {
+                        output.push_str(num.to_str_sino());
+                    }
+                } else {
+                    output.push_str(num.to_str_sino());
+                }
             }
         }
     }
