@@ -1,6 +1,6 @@
 [package]
 name = "korean_numbers"
-version = "0.4.0"
+version = "0.4.1"
 authors = ["Andrew Zah <zah@andrewzah.com>"]
 edition = "2018"
 license = "Apache-2.0"
@@ -8,11 +8,11 @@ keywords = ["korean", "hangul"]
 categories = ["internationalization"]
 repository = "https://git.andrewzah.com/andrei/korean-nums"
 homepage = "https://git.andrewzah.com/andrei/korean-nums"
+readme = "README.md"
 description = '''
 This parses a string of integers into hangul.
-Example: 
-  90,000 -> 구만
-  8300,0000 -> 팔천삼백만
+Examples: 90,000 maps to 구만. 83,000,000 maps to 팔천삼백만.
+Currently only Sino-Korean parsing is supported.
 '''
 
 [dependencies]
