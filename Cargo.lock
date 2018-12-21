@@ -13,7 +13,7 @@ dependencies = [
 
 [[package]]
 name = "korean_numbers"
-version = "0.5.1"
+version = "0.5.2"
 dependencies = [
  "itertools 0.8.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "num 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
