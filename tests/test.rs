@@ -1,7 +1,7 @@
 extern crate num;
 extern crate korean_nums;
 
-use korean_nums::{hangeul_from_int, hangeul_from_bigint};
+use korean_nums::api::{hangeul_from_int, hangeul_from_bigint};
 use num::{pow, BigInt};
 
 // -----------

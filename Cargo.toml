@@ -2,7 +2,7 @@
 name = "korean_numbers"
 version = "0.5.2"
 authors = ["Andrew Zah <zah@andrewzah.com>"]
-edition = "2018"
+#edition = "2018"
 license = "Apache-2.0"
 keywords = ["korean", "hangeul", "libhangeul", "hangul"]
 categories = ["internationalization"]
