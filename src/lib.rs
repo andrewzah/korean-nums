@@ -1,7 +1,10 @@
 extern crate num;
 
-mod numbers;
-mod place;
-mod block;
 pub mod api;
+pub mod utility;
+pub mod numbers;
+
+mod block;
+mod math;
 mod parse;
+mod place;

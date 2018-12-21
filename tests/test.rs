@@ -2,6 +2,8 @@ extern crate num;
 extern crate korean_nums;
 
 use korean_nums::api::{hangeul_from_int, hangeul_from_bigint};
+use korean_nums::numbers::KoreanNumberSino;
+use korean_nums::utility;
 use num::{pow, BigInt};
 
 // -----------
@@ -247,5 +249,31 @@ fn it_handles_big_zeroes_sino() {
 
     for (expected, input) in testcases {
         assert_eq!(expected, hangeul_from_bigint(input));
+    }
+}
+
+// --------------------
+// Text and Conjugation
+// --------------------
+
+#[test]
+fn it_determines_vowels() {
+    let testcases = vec![
+        ("이", "은", '1'),
+        ("가", "는", '2'),
+        ("이", "은", '3'),
+        ("가", "는", '4'),
+        ("가", "는", '5'),
+        ("이", "은", '6'),
+        ("이", "은", '7'),
+        ("이", "은", '8'),
+        ("가", "는", '9'),
+    ];
+
+    for (subject, topic, c) in testcases {
+        let num = KoreanNumberSino::from_char(&c).unwrap();
+
+        assert_eq!(topic, num.ending_type().topic_particle());
+        assert_eq!(subject, num.ending_type().subject_particle());
     }
 }

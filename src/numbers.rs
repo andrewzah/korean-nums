@@ -1,3 +1,5 @@
+use utility;
+
 pub enum KoreanNumberSino {
     Zero,
     One,
@@ -11,6 +13,27 @@ pub enum KoreanNumberSino {
     Nine,
     #[allow(dead_code)]
     Ten,
+}
+
+pub enum EndingType {
+    Vowel,
+    Consonant
+}
+
+impl EndingType {
+    pub fn subject_particle(&self) -> &str {
+        match self {
+            &EndingType::Vowel => "가",
+            &EndingType::Consonant => "이",
+        }
+    }
+
+    pub fn topic_particle(&self) -> &str {
+        match self {
+            &EndingType::Vowel => "는",
+            &EndingType::Consonant => "은",
+        }
+    }
 }
 
 impl PartialEq<i8> for KoreanNumberSino {
@@ -67,6 +90,23 @@ impl KoreanNumberSino {
             &KoreanNumberSino::Ten => 10,
         }
     }
+
+    pub fn ending_type(&self) -> EndingType {
+        match self {
+            &KoreanNumberSino::Zero   => EndingType::Consonant,
+            &KoreanNumberSino::One    => EndingType::Consonant,
+            &KoreanNumberSino::Two    => EndingType::Vowel,
+            &KoreanNumberSino::Three  => EndingType::Consonant,
+            &KoreanNumberSino::Four   => EndingType::Vowel,
+            &KoreanNumberSino::Five   => EndingType::Vowel,
+            &KoreanNumberSino::Six    => EndingType::Consonant,
+            &KoreanNumberSino::Seven  => EndingType::Consonant,
+            &KoreanNumberSino::Eight  => EndingType::Consonant,
+            &KoreanNumberSino::Nine   => EndingType::Vowel,
+            &KoreanNumberSino::Ten    => EndingType::Consonant,
+        }
+    }
+
 
     #[allow(dead_code)]
     pub fn to_hanja(&self) -> &str {
