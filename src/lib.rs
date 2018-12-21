@@ -81,4 +81,3 @@ fn prepare_input<T>(input: T) -> Vec<char>
 
     nums
 }
-
