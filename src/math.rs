@@ -4,6 +4,14 @@ pub enum Sign {
 }
 
 impl Sign {
+    pub fn from_str(s: &str) -> Option<Sign> {
+        match s {
+            "+" => Some(Sign::Plus),
+            "-" => Some(Sign::Minus),
+            _ => None
+        }
+    }
+
     pub fn to_str(&self) -> &str {
         match self {
             &Sign::Plus => "플러스",
@@ -12,35 +20,11 @@ impl Sign {
     }
 }
 
-pub enum MathOp {
+pub enum KoreanMathOp {
     Add,
     Divide,
     Multiply,
     Subtract,
-}
-
-impl MathOp {
-    pub fn from_char(c: &char) -> Option<MathOp> {
-        match c {
-            '+' => Some(MathOp::Add),
-            '/' => Some(MathOp::Divide),
-            '*' => Some(MathOp::Multiply),
-            '-' => Some(MathOp::Subtract),
-            _ => None
-        }
-    }
-
-    pub fn to_str(&self) -> &str {
-        match self {
-            &MathOp::Add => "더하기",
-            &MathOp::Divide => "나누기",
-            &MathOp::Multiply => "곱하기",
-            &MathOp::Subtract => "빼기",
-        }
-    }
-}
-
-pub enum MathExpression {
     Pow,
     Fraction,
     LessThan,
@@ -50,29 +34,55 @@ pub enum MathExpression {
     Log
 }
 
-impl MathExpression {
-    pub fn from_char(s: &str) -> Option<MathExpression> {
+impl KoreanMathOp {
+    pub fn from_str(s: &str) -> Option<KoreanMathOp> {
         match s {
-            "^" => Some(MathExpression::Pow),
-            "/" => Some(MathExpression::Fraction),
-            "<" => Some(MathExpression::LessThan),
-            ">" => Some(MathExpression::GreaterThan),
-            "=" => Some(MathExpression::Equal),
-            "!=" | "<>" | "=/=" => Some(MathExpression::NotEqual),
-            "log" => Some(MathExpression::Log),
+            "+" => Some(KoreanMathOp::Add),
+            "/" => Some(KoreanMathOp::Divide),
+            "*" => Some(KoreanMathOp::Multiply),
+            "-" => Some(KoreanMathOp::Subtract),
+            "^" => Some(KoreanMathOp::Pow),
+            "<" => Some(KoreanMathOp::LessThan),
+            ">" => Some(KoreanMathOp::GreaterThan),
+            "=" => Some(KoreanMathOp::Equal),
+            "!=" | "<>" | "=/=" => Some(KoreanMathOp::NotEqual),
+            "log" => Some(KoreanMathOp::Log),
             _ => None
         }
     }
 
-    pub fn to_str(&self, curr_num: &str, next_num: &str) -> String {
+    pub fn to_str(&self, left_num: &str, right_num: &str) -> String {
+        let unformatted_str = self.unformatted_str();
+        let new_str = unformatted_str
+            .replace("{1}", left_num)
+            .replace("{2}", right_num);
+
         match self {
-            &MathExpression::Pow => format!("{}의 {}승", curr_num, next_num),
-            &MathExpression::Fraction => format!("{}분의 {}", curr_num, next_num),
-            &MathExpression::LessThan => format!("{}는 {}보다 작다", curr_num, next_num),
-            &MathExpression::GreaterThan => format!("{}는 {}보다 크다", curr_num, next_num),
-            &MathExpression::Equal => format!("{}는 {}이다", curr_num, next_num),
-            &MathExpression::NotEqual => format!("{}는 {}가 아니다", curr_num, next_num),
-            &MathExpression::Log => format!("{} 로그 {}", curr_num, next_num),
+            &KoreanMathOp::LessThan |
+            &KoreanMathOp::GreaterThan |
+            &KoreanMathOp::Equal |
+            &KoreanMathOp::NotEqual => {
+                return new_str.replace("{3}", "는")
+            },
+            _ => {
+                return new_str
+            }
+        }
+    }
+
+    fn unformatted_str(&self) -> &str {
+        match self {
+            &KoreanMathOp::Add => "{1} 더하기 {2}",
+            &KoreanMathOp::Divide => "{1} 나누기 {2}",
+            &KoreanMathOp::Multiply => "{1} 곱하기 {2}",
+            &KoreanMathOp::Subtract => "{1} 빼기 {2}",
+            &KoreanMathOp::Pow => "{1}의 {2}승",
+            &KoreanMathOp::Fraction => "{1}분의 {2}",
+            &KoreanMathOp::LessThan => "{1}{3} {2}보다 작다",
+            &KoreanMathOp::GreaterThan => "{1}{3} {2}보다 크다",
+            &KoreanMathOp::Equal => "{1}{3} {2}이다",
+            &KoreanMathOp::NotEqual => "{1}{3} {2}가 아니다",
+            &KoreanMathOp::Log => "{1} 로그 {2}",
         }
     }
 }

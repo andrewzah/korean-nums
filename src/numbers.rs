@@ -1,4 +1,72 @@
-use utility;
+use num::{PrimInt, FromPrimitive, Integer, Float};
+use parse;
+
+pub enum NumberSystem{
+    PureKorean,
+    SinoKorean
+}
+
+pub struct KoreanFloat<F>
+where F: Float {
+    pub value: F,
+}
+
+
+pub struct KoreanInteger<I>
+where I: ToString + Integer + FromPrimitive {
+    pub value: I,
+    pub num_system: NumberSystem,
+}
+
+impl <I> KoreanInteger<I>
+where I: ToString + Integer + FromPrimitive {
+    pub fn from_int(value: I, num_system: NumberSystem) -> KoreanInteger<I> {
+        let integer = KoreanInteger {
+            value,
+            num_system,
+        };
+        integer.validate();
+        integer
+    }
+
+    pub fn validate(&self) {
+        match self.num_system {
+            NumberSystem::PureKorean => {
+                if self.value > FromPrimitive::from_i8(99).unwrap() {
+                    panic!("Pure korean numbers only go up to 99.");
+                }
+            },
+            NumberSystem::SinoKorean => {}
+        }
+        if self.value < FromPrimitive::from_i8(0).unwrap() {
+            panic!("Input cannot be negative, yet.")
+        }
+    }
+
+    pub fn get_hangeul(&self) -> String {
+        let prepared_input = self.prepare_input();
+        match self.num_system {
+            NumberSystem::PureKorean => {
+                parse::parse_hangeul_pure(prepared_input)
+            },
+            NumberSystem::SinoKorean => {
+                parse::parse_hangeul_sino(prepared_input)
+            }
+        }
+    }
+
+    fn prepare_input(&self) -> Vec<char>
+    {
+        let nums = self.value
+            .to_string()
+            .replace(",", "")
+            .chars()
+            .rev()
+            .collect();
+
+        nums
+    }
+}
 
 pub enum KoreanNumberSino {
     Zero,
@@ -99,7 +167,7 @@ impl KoreanNumberSino {
             &KoreanNumberSino::Seven  => EndingType::Consonant,
             &KoreanNumberSino::Eight  => EndingType::Consonant,
             &KoreanNumberSino::Nine   => EndingType::Vowel,
-            &KoreanNumberSino::Ten    => EndingType::Consonant,
+            //&KoreanNumberSino::Ten    => EndingType::Consonant,
         }
     }
 

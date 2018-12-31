@@ -85,6 +85,7 @@ pub fn parse_hangeul_pure(numbers: Vec<char>) -> String {
             (0, '0') => {
                 if let Some((_, next_num)) = iter.peek() {
                     let new_input = format!("{}{}", next_num, "0");
+                    println!("{}", new_input);
                     let num = numbers::KoreanNumberPure::from_str(&new_input).unwrap();
 
                     output.push_str(num.to_str());
@@ -116,5 +117,11 @@ pub fn parse_hangeul_pure(numbers: Vec<char>) -> String {
             (_, _) => {}
         }
     }
+    output
+}
+
+pub fn parse_hangeul_float() -> String {
+    let mut output = String::new();
+    //output.push(parse_hangeul_sino(
     output
 }

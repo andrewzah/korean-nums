@@ -1,7 +1,0 @@
-pipeline:
-  build:
-    image: rust:1.29-slim
-    commands:
-      - cargo update
-      - cargo build
-      - cargo test

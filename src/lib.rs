@@ -1,10 +1,12 @@
 extern crate num;
-use num::{BigInt, FromPrimitive, PrimInt};
+use num::{BigInt, Integer, FromPrimitive, PrimInt};
 
 mod numbers;
 mod place;
 mod block;
 mod parse;
+
+use numbers::{KoreanInteger, NumberSystem};
 
 /// Parses an int into a Hangeul String.
 ///
@@ -14,15 +16,10 @@ mod parse;
 /// *is_sino* - true  => parse as a Sino-Korean number.
 ///             false => parse as a Pure-Korean number.
 /// ```
-pub fn hangeul_from_int<T>(input: T, is_sino: bool) -> String
-    where T: PrimInt + ToString + FromPrimitive
+pub fn hangeul_from_int<T>(input: T, number_system: NumberSystem) -> String
+    where T: Integer + ToString + FromPrimitive
 {
-    validate(input, is_sino);
-    let prepared_input = prepare_input(input);
-    match is_sino {
-        true => parse::parse_hangeul_sino(prepared_input),
-        false => parse::parse_hangeul_pure(prepared_input),
-    }
+    KoreanInteger::from_int(input, number_system).get_hangeul()
 }
 
 /// Parses an int String into a Hangeul String.
@@ -33,8 +30,8 @@ pub fn hangeul_from_int<T>(input: T, is_sino: bool) -> String
 /// *is_sino* - true  => parse as a Sino-Korean number.
 ///             false => parse as a Pure-Korean number.
 /// ```
-pub fn hangeul_from_string(input: String, is_sino: bool) -> String {
-    hangeul_from_int(input.parse::<u64>().unwrap(), is_sino)
+pub fn hangeul_from_string(input: String, number_system: NumberSystem) -> String {
+    hangeul_from_int(input.parse::<u128>().unwrap(), number_system)
 }
 
 /// Parses a BigInt into a Hangeul String.
@@ -56,28 +53,4 @@ pub fn hangeul_from_bigint(input: BigInt) -> String
         .collect();
 
     parse::parse_hangeul_sino(prepared_input)
-}
-
-fn validate<T>(input: T, is_sino: bool)
-    where T: PrimInt + ToString + FromPrimitive
-{
-    if is_sino == false && input > FromPrimitive::from_u64(99).unwrap() {
-        panic!("Pure korean numbers only go up to 99.");
-    }
-    if input < FromPrimitive::from_u64(0).unwrap() {
-        panic!("Input cannot be negative.")
-    }
-}
-
-fn prepare_input<T>(input: T) -> Vec<char>
-    where T: PrimInt + ToString + Ord
-{
-    let nums = input
-        .to_string()
-        .replace(",", "")
-        .chars()
-        .rev()
-        .collect();
-
-    nums
 }
