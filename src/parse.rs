@@ -6,7 +6,7 @@ use place;
 pub fn parse_hangeul_sino(numbers: Vec<char>) -> String {
     let len = numbers.len() - 1;
     let mut output = String::new();
-    let mut iter = numbers.iter().enumerate();
+    let mut iter = numbers.iter().enumerate().peekable();
 
     while let Some((idx, input_num)) = iter.next() {
         let remaining = len - idx;
@@ -22,6 +22,7 @@ pub fn parse_hangeul_sino(numbers: Vec<char>) -> String {
                 }
                 zeroes += 1;
             }
+            zeroes += idx;
 
             if let Some(block) = block::Block::from_usize(zeroes) {
                 output.push_str(block.to_str());
@@ -35,11 +36,14 @@ pub fn parse_hangeul_sino(numbers: Vec<char>) -> String {
                     let block = block::Block::from_usize(zeroes - zmod).unwrap();
                     output.push_str(block.to_str());
                 }
+
                 let place = place::Place::from_usize(zeroes % 4).unwrap();
                 output.push_str(place.to_str());
+
                 if num != 1 {
                     output.push_str(num.to_str());
                 }
+
                 continue;
             }
         }

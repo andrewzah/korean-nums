@@ -1,3 +1,7 @@
+## note!
+
+For 0.6, this crate is going under a substantial re-write. The API is likely to change.
+
 ## Korean Numbers
 
 Converts a `string`, `{integer}`, or `BigInt` to hangul output.
@@ -8,15 +12,15 @@ You can choose between Sino-Korean numbers (based on Korean's adopted Chinese ch
 
 ```rust
 // Get Pure Korean Hangeul
-hangeul_from_int(30, false);
-hangeul_from_string(String::from("2"), false);
+assert_eq!("서른둘", hangeul_from_int(30, false));
+assert_eq!("둘", hangeul_from_string(String::from("2"), false));
 
 // Get Sino-Korean Hangeul
-hangeul_from_int(600, true);
-hangeul_from_string(String::from("980"), true);
+assert_eq!("백이십", hangeul_from_int(120, true));
+assert_eq!("만 이천삼백사십오", hangeul_from_string(String::from("12345"), true));
 
 // Get Sino-Korean Hangeul from a BigInt
-hangeul_from_bigint(pow(BigInt::from(10), 51));
+assert_eq!("천극", hangeul_from_bigint(pow(BigInt::from(10), 51))),
 ```
 
 ### About Korean Numbers

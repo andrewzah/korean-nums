@@ -1,6 +1,6 @@
 [package]
 name = "korean_numbers"
-version = "0.5.3"
+version = "0.5.5"
 authors = ["Andrew Zah <zah@andrewzah.com>"]
 #edition = "2018"
 license = "Apache-2.0"

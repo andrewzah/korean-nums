@@ -9,8 +9,6 @@ pub enum KoreanNumberSino {
     Seven,
     Eight,
     Nine,
-    #[allow(dead_code)]
-    Ten,
 }
 
 impl PartialEq<i8> for KoreanNumberSino {
@@ -48,7 +46,6 @@ impl KoreanNumberSino {
             &KoreanNumberSino::Seven => "칠",
             &KoreanNumberSino::Eight => "팔",
             &KoreanNumberSino::Nine => "구",
-            &KoreanNumberSino::Ten => "십",
         }
     }
 
@@ -64,7 +61,6 @@ impl KoreanNumberSino {
             &KoreanNumberSino::Seven => 7,
             &KoreanNumberSino::Eight => 8,
             &KoreanNumberSino::Nine => 9,
-            &KoreanNumberSino::Ten => 10,
         }
     }
 
@@ -81,7 +77,7 @@ impl KoreanNumberSino {
             &KoreanNumberSino::Seven => "七",
             &KoreanNumberSino::Eight => "八",
             &KoreanNumberSino::Nine => "九",
-            &KoreanNumberSino::Ten => "十",
+            //&KoreanNumberSino::Ten => "十",
         }
     }
 }
