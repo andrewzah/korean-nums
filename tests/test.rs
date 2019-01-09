@@ -1,9 +1,13 @@
 extern crate num;
 extern crate korean_nums;
 
-use korean_nums::api::{hangeul_from_int, hangeul_from_bigint};
-use korean_nums::numbers::{NumberStyle, KoreanInteger, KoreanFloat, KoreanNumberSino};
-use num::{pow, BigInt};
+use num::{pow, Float, BigInt};
+use korean_nums::{
+    NumberSystem,
+    hangeul_from_float,
+    hangeul_from_int,
+    hangeul_from_bigint
+};
 
 // -----------
 // Pure Korean
@@ -25,8 +29,7 @@ fn it_handles_zero_through_nine_korean() {
     ];
 
     for (input, expected) in testcases {
-        let num = KoreanInteger::from_int(input, NumberStyle::PureKorean);
-        assert_eq!(expected, num.get_hangeul());
+        assert_eq!(expected, hangeul_from_int(input, NumberSystem::PureKorean));
     }
 }
 
@@ -126,8 +129,7 @@ fn it_handles_ten_through_ninety_nine_pure() {
     ];
 
     for (input, expected) in testcases {
-        let num = KoreanInteger::from_int(input, NumberStyle::PureKorean);
-        assert_eq!(expected, num.get_hangeul());
+        assert_eq!(expected, hangeul_from_int(input, NumberSystem::PureKorean));
     }
 }
 
@@ -155,8 +157,7 @@ fn it_handles_mixed_digits_zeroes_sino() {
     ];
 
     for &(input, expected) in testcases.iter() {
-        let num = KoreanInteger::from_int(input, NumberStyle::SinoKorean);
-        assert_eq!(expected, num.get_hangeul());
+        assert_eq!(expected, hangeul_from_int(input, NumberSystem::SinoKorean));
     }
 }
 
@@ -186,8 +187,7 @@ fn it_handles_digits_sino(){
     ];
 
     for (input, expected) in testcases {
-        let num = KoreanInteger::from_int(input, NumberStyle::SinoKorean);
-        assert_eq!(expected, num.get_hangeul());
+        assert_eq!(expected, hangeul_from_int(input, NumberSystem::SinoKorean));
     }
 }
 
@@ -235,8 +235,7 @@ fn it_handles_zeroes_sino() {
     ];
 
     for (expected, input) in testcases {
-        let num = KoreanInteger::from_int(input, NumberStyle::SinoKorean);
-        assert_eq!(expected, num.get_hangeul());
+        assert_eq!(expected, hangeul_from_int(input, NumberSystem::SinoKorean));
     }
 }
 
@@ -259,8 +258,40 @@ fn it_handles_big_zeroes_sino() {
     ];
 
     for (expected, input) in testcases {
-        let num = KoreanInteger::from_int(input, NumberStyle::SinoKorean);
-        assert_eq!(expected, num.get_hangeul());
+        assert_eq!(expected, hangeul_from_bigint(input));
+    }
+}
+
+#[test]
+fn it_handles_mixed_digits_zeroes_float()
+{
+    let testcases: Vec<(f32, &str)> = vec![
+        (1.1, "일 점 일"),
+        (2.3, "이 점 삼"),
+        (1001.303, "천일 점 삼백삼"),
+        (-101.101, "마이너스 백일 점 백일"),
+        //(-100.02, "마이너스 백 범 공이"),
+    ];
+
+    for &(input, expected) in testcases.iter() {
+        assert_eq!(expected, hangeul_from_float(input));
+    }
+}
+
+#[test]
+fn it_handles_mixed_digits_zeroes_negative() {
+    let testcases: Vec<(i32, &str)> = vec![
+        (-1, "마이너스 일"),
+        (-100, "마이너스 백"),
+        (-101, "마이너스 백일"),
+        (-108, "마이너스 백팔"),
+        (-120, "마이너스 백이십"),
+        (-1001, "마이너스 천일"),
+        (-1_0001, "마이너스 만일"),
+    ];
+
+    for &(input, expected) in testcases.iter() {
+        assert_eq!(expected, hangeul_from_int(input, NumberSystem::SinoKorean));
     }
 }
 
@@ -268,7 +299,7 @@ fn it_handles_big_zeroes_sino() {
 // Text and Conjugation
 // --------------------
 
-#[test]
+//#[test]
 fn it_determines_vowels() {
     let testcases = vec![
         ("이", "은", '1'),
@@ -283,22 +314,11 @@ fn it_determines_vowels() {
     ];
 
     for (subject, topic, c) in testcases {
-        let num = KoreanNumberSino::from_char(&c).unwrap();
+        //let num = KoreanNumberSino::from_char(&c).unwrap();
 
-        assert_eq!(topic, num.ending_type().topic_particle());
-        assert_eq!(subject, num.ending_type().subject_particle());
+        //assert_eq!(topic, num.ending_type().topic_particle());
+        //assert_eq!(subject, num.ending_type().subject_particle());
     }
-}
-
-#[test]
-fn api() {
-    let regular_num = KoreanInteger::from_int(10, NumberStyle::PureKorean);
-    regular_num.get_hangeul();
-
-    let big_num = KoreanInteger::from_int(pow(BigInt::from(10), 44), NumberStyle::SinoKorean);
-    big_num.get_hangeul();
-
-    let float_num = KoreanFloat { value: 10.0, num_style: NumberStyle::PureKorean };
 }
 
 //#[test]

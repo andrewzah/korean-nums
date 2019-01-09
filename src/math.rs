@@ -4,19 +4,23 @@ pub enum Sign {
 }
 
 impl Sign {
-    pub fn from_str(s: &str) -> Option<Sign> {
-        match s {
-            "+" => Some(Sign::Plus),
-            "-" => Some(Sign::Minus),
+    pub fn from_char(c: &char) -> Option<Sign> {
+        match c {
+            '+' => Some(Sign::Plus),
+            '-' => Some(Sign::Minus),
             _ => None
         }
     }
 
     pub fn to_str(&self) -> &str {
         match self {
-            &Sign::Plus => "플러스",
-            &Sign::Minus => "마이너스"
+            &Sign::Plus => "플러스 ",
+            &Sign::Minus => "마이너스 "
         }
+    }
+
+    pub fn to_string_rev(&self) -> String {
+        self.to_str().chars().rev().collect::<String>()
     }
 }
 

@@ -1,45 +1,23 @@
 extern crate num;
-use num::{BigInt, Integer, FromPrimitive, PrimInt};
+use num::{BigInt, Float, Integer, FromPrimitive};
 
 mod numbers;
 mod place;
 mod block;
 mod parse;
+mod math;
 
-use numbers::{KoreanInteger, NumberSystem};
+use numbers::{KoreanInteger};
+pub use numbers::NumberSystem;
 
 /// Parses an int into a Hangeul String.
-///
-/// ```md
-/// Args:
-/// *input* - Any {integer}.
-/// *is_sino* - true  => parse as a Sino-Korean number.
-///             false => parse as a Pure-Korean number.
-/// ```
 pub fn hangeul_from_int<T>(input: T, number_system: NumberSystem) -> String
-    where T: Integer + ToString + FromPrimitive
+    where T: Copy + Integer + ToString + FromPrimitive
 {
     KoreanInteger::from_int(input, number_system).get_hangeul()
 }
 
-/// Parses an int String into a Hangeul String.
-///
-/// ```md
-/// Args:
-/// *input* - A String that can be parsed to an {integer}.
-/// *is_sino* - true  => parse as a Sino-Korean number.
-///             false => parse as a Pure-Korean number.
-/// ```
-pub fn hangeul_from_string(input: String, number_system: NumberSystem) -> String {
-    hangeul_from_int(input.parse::<u128>().unwrap(), number_system)
-}
-
 /// Parses a BigInt into a Hangeul String.
-///
-/// ```md
-/// Args:
-/// *input* - A BigInt.
-/// ```
 pub fn hangeul_from_bigint(input: BigInt) -> String
 {
     if input < FromPrimitive::from_i8(0).unwrap() {
@@ -53,4 +31,25 @@ pub fn hangeul_from_bigint(input: BigInt) -> String
         .collect();
 
     parse::parse_hangeul_sino(prepared_input)
+}
+
+pub fn hangeul_from_float<F>(input: F) -> String
+    where F: Copy + ToString + Float
+{
+    let string = input.to_string();
+    let numbers = string.split(".")
+        .collect::<Vec<&str>>();
+
+    let left_side =
+        KoreanInteger::from_int(
+            numbers[0].parse::<u128>().unwrap(),
+            NumberSystem::SinoKorean
+        ).get_hangeul();
+    let right_side =
+        KoreanInteger::from_int(
+            numbers[1].parse::<u128>().unwrap(),
+            NumberSystem::SinoKorean
+        ).get_hangeul();
+
+    format!("{} 점 {}", left_side, right_side)
 }

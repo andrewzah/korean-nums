@@ -1,30 +1,28 @@
-use num::{PrimInt, FromPrimitive, Integer, Float};
+use num::{FromPrimitive, Integer, Float};
+use math::{Sign};
 use parse;
+use super::{hangeul_from_float};
 
 pub enum NumberSystem{
     PureKorean,
     SinoKorean
 }
 
-pub struct KoreanFloat<F>
-where F: Float {
-    pub value: F,
-}
-
 
 pub struct KoreanInteger<I>
-where I: ToString + Integer + FromPrimitive {
+where I: Copy + ToString + Integer + FromPrimitive {
     pub value: I,
     pub num_system: NumberSystem,
 }
 
 impl <I> KoreanInteger<I>
-where I: ToString + Integer + FromPrimitive {
+where I: Copy + ToString + Integer + FromPrimitive {
     pub fn from_int(value: I, num_system: NumberSystem) -> KoreanInteger<I> {
         let integer = KoreanInteger {
-            value,
+            value: value,
             num_system,
         };
+
         integer.validate();
         integer
     }
@@ -35,16 +33,17 @@ where I: ToString + Integer + FromPrimitive {
                 if self.value > FromPrimitive::from_i8(99).unwrap() {
                     panic!("Pure korean numbers only go up to 99.");
                 }
+                if self.value < FromPrimitive::from_i8(0).unwrap() {
+                    panic!("Input cannot be negative.")
+                }
             },
-            NumberSystem::SinoKorean => {}
-        }
-        if self.value < FromPrimitive::from_i8(0).unwrap() {
-            panic!("Input cannot be negative, yet.")
+            NumberSystem::SinoKorean => {},
         }
     }
 
     pub fn get_hangeul(&self) -> String {
         let prepared_input = self.prepare_input();
+
         match self.num_system {
             NumberSystem::PureKorean => {
                 parse::parse_hangeul_pure(prepared_input)

@@ -2,6 +2,7 @@ use std::cmp::{min};
 use numbers;
 use block;
 use place;
+use math::{Sign};
 
 pub fn parse_hangeul_sino(numbers: Vec<char>) -> String {
     let len = numbers.len() - 1;
@@ -9,6 +10,12 @@ pub fn parse_hangeul_sino(numbers: Vec<char>) -> String {
     let mut iter = numbers.iter().enumerate().peekable();
 
     while let Some((idx, input_num)) = iter.next() {
+        if let Some(sign) = Sign::from_char(&input_num) {
+            if idx != len { panic!("+ or - symbol isn't at the beginning of the input."); }
+            output.push_str(&sign.to_string_rev());
+            continue;
+        }
+
         let remaining = len - idx;
         let min_peek_len = min(remaining, 3);
         let mut num = numbers::KoreanNumberSino::from_char(input_num).unwrap();
@@ -120,8 +127,22 @@ pub fn parse_hangeul_pure(numbers: Vec<char>) -> String {
     output
 }
 
-pub fn parse_hangeul_float() -> String {
+pub fn parse_hangeul_float(input: Vec<char>) -> String {
     let mut output = String::new();
-    //output.push(parse_hangeul_sino(
+    let mut left_side_chars: Vec<char> = vec![];
+    let mut iter = input.iter().enumerate().peekable();
+
+    while let Some((idx, input_char)) = iter.next() {
+        while let Some((_, next_char)) = iter.next() {
+            if let Some(sign) = Sign::from_char(next_char) {
+                output.push_str(sign.to_str());
+                break;
+            }
+            left_side_chars.append(mut input_char);
+        }
+
+        let left_side = parse_hangeul_sino(left_side_chars);
+    }
+
     output
 }
