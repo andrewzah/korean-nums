@@ -1,10 +1,5 @@
-extern crate num;
 use num::{BigInt, FromPrimitive, PrimInt};
-
-mod numbers;
-mod place;
-mod block;
-mod parse;
+use parse;
 
 /// Parses an int into a Hangeul String.
 ///
@@ -14,6 +9,7 @@ mod parse;
 /// *is_sino* - true  => parse as a Sino-Korean number.
 ///             false => parse as a Pure-Korean number.
 /// ```
+#[allow(dead_code)]
 pub fn hangeul_from_int<T>(input: T, is_sino: bool) -> String
     where T: PrimInt + ToString + FromPrimitive
 {
@@ -33,6 +29,7 @@ pub fn hangeul_from_int<T>(input: T, is_sino: bool) -> String
 /// *is_sino* - true  => parse as a Sino-Korean number.
 ///             false => parse as a Pure-Korean number.
 /// ```
+#[allow(dead_code)]
 pub fn hangeul_from_string(input: String, is_sino: bool) -> String {
     hangeul_from_int(input.parse::<u64>().unwrap(), is_sino)
 }
@@ -43,6 +40,7 @@ pub fn hangeul_from_string(input: String, is_sino: bool) -> String {
 /// Args:
 /// *input* - A BigInt.
 /// ```
+#[allow(dead_code)]
 pub fn hangeul_from_bigint(input: BigInt) -> String
 {
     if input < FromPrimitive::from_i8(0).unwrap() {
