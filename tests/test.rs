@@ -4,7 +4,8 @@ extern crate korean_nums;
 use num::{pow, Float, BigInt};
 use korean_nums::{
     NumberSystem,
-    hangeul_from_float,
+    hangeul_from_expression,
+    hangeul_from_money,
     hangeul_from_int,
     hangeul_from_bigint
 };
@@ -263,18 +264,18 @@ fn it_handles_big_zeroes_sino() {
 }
 
 #[test]
-fn it_handles_mixed_digits_zeroes_float()
+fn it_handles_mixed_digits_zeroes_money()
 {
-    let testcases: Vec<(f32, &str)> = vec![
+    let testcases: Vec<(f64, &str)> = vec![
         (1.1, "일 점 일"),
         (2.3, "이 점 삼"),
-        (1001.303, "천일 점 삼백삼"),
-        (-101.101, "마이너스 백일 점 백일"),
-        //(-100.02, "마이너스 백 범 공이"),
+        (1001.03, "천일 점 삼"),
+        (1_0001.03, "만일 점 삼"),
+        (1001.030000, "천일 점 삼"),
     ];
 
     for &(input, expected) in testcases.iter() {
-        assert_eq!(expected, hangeul_from_float(input));
+        assert_eq!(expected, hangeul_from_money(input));
     }
 }
 
@@ -292,6 +293,25 @@ fn it_handles_mixed_digits_zeroes_negative() {
 
     for &(input, expected) in testcases.iter() {
         assert_eq!(expected, hangeul_from_int(input, NumberSystem::SinoKorean));
+    }
+}
+
+#[test]
+fn it_handles_math_expressions() {
+    let testcases: Vec<(&str, &str)> = vec![
+        ("1 + 1", "일 더하기 일"),
+        ("1 - 1", "일 빼기 일"),
+        ("2 > 1", "이는 일보다 크다"),
+        ("3 > 2", "삼은 이보다 크다"),
+        ("1 = 1", "일은 일이다"),
+        ("1 != 3", "일은 삼이 아니다"),
+        ("1 <> 3", "일은 삼이 아니다"),
+        ("1 =/= 3", "일은 삼이 아니다"),
+        ("1 log 3", "일 로그 삼"),
+    ];
+
+    for &(input, expected) in testcases.iter() {
+        assert_eq!(expected, hangeul_from_expression(input));
     }
 }
 

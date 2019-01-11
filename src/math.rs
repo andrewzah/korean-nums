@@ -1,3 +1,5 @@
+use utilities::{get_subject_marker, get_topic_marker};
+
 pub enum Sign {
     Plus,
     Minus
@@ -64,9 +66,13 @@ impl KoreanMathOp {
         match self {
             &KoreanMathOp::LessThan |
             &KoreanMathOp::GreaterThan |
-            &KoreanMathOp::Equal |
+            &KoreanMathOp::Equal => {
+                return new_str.replace("{3}", get_topic_marker(left_num))
+            },
             &KoreanMathOp::NotEqual => {
-                return new_str.replace("{3}", "는")
+                return new_str
+                    .replace("{3}", get_topic_marker(left_num))
+                    .replace("{4}", get_subject_marker(right_num))
             },
             _ => {
                 return new_str
@@ -85,7 +91,7 @@ impl KoreanMathOp {
             &KoreanMathOp::LessThan => "{1}{3} {2}보다 작다",
             &KoreanMathOp::GreaterThan => "{1}{3} {2}보다 크다",
             &KoreanMathOp::Equal => "{1}{3} {2}이다",
-            &KoreanMathOp::NotEqual => "{1}{3} {2}가 아니다",
+            &KoreanMathOp::NotEqual => "{1}{3} {2}{4} 아니다",
             &KoreanMathOp::Log => "{1} 로그 {2}",
         }
     }

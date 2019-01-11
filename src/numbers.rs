@@ -1,7 +1,5 @@
-use num::{FromPrimitive, Integer, Float};
-use math::{Sign};
+use num::{FromPrimitive, Integer};
 use parse;
-use super::{hangeul_from_float};
 
 pub enum NumberSystem{
     PureKorean,

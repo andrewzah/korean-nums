@@ -1,8 +1,8 @@
 [package]
 name = "korean_numbers"
-version = "0.5.5"
+version = "0.6.0"
 authors = ["Andrew Zah <zah@andrewzah.com>"]
-#edition = "2018"
+edition = "2018"
 license = "Apache-2.0"
 keywords = ["korean", "hangeul", "libhangeul", "hangul"]
 categories = ["internationalization"]
@@ -10,9 +10,7 @@ repository = "https://git.sr.ht/~andrewzah/korean_numbers"
 homepage = "https://git.andrewzah.com/andrei/korean-nums"
 readme = "README.md"
 description = '''
-This parses a string of integers into hangul.
-Examples: 90,000 maps to 구만. 83,000,000 maps to 팔천삼백만.
-Currently only Sino-Korean parsing is supported.
+This parses several types of numbers and expressions to hangeul.
 '''
 
 [dependencies]

@@ -1,7 +1,8 @@
-use std::cmp::{min};
 use numbers;
 use block;
 use place;
+
+use std::cmp::min;
 use math::{Sign};
 
 pub fn parse_hangeul_sino(numbers: Vec<char>) -> String {
@@ -127,22 +128,9 @@ pub fn parse_hangeul_pure(numbers: Vec<char>) -> String {
     output
 }
 
-pub fn parse_hangeul_float(input: Vec<char>) -> String {
+pub fn parse_hangeul_float(left_side: Vec<char>, right_side: Vec<char>) -> String {
     let mut output = String::new();
     let mut left_side_chars: Vec<char> = vec![];
-    let mut iter = input.iter().enumerate().peekable();
-
-    while let Some((idx, input_char)) = iter.next() {
-        while let Some((_, next_char)) = iter.next() {
-            if let Some(sign) = Sign::from_char(next_char) {
-                output.push_str(sign.to_str());
-                break;
-            }
-            left_side_chars.append(mut input_char);
-        }
-
-        let left_side = parse_hangeul_sino(left_side_chars);
-    }
 
     output
 }

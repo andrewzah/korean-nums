@@ -4,7 +4,13 @@ For 0.6, this crate is going under a substantial re-write. The API is likely to 
 
 ## Korean Numbers
 
-Converts a `string`, `{integer}`, or `BigInt` to hangul output.
+Converting a few different types to hangeul is supported:
+
+* int
+* money (f64)
+* bigint
+* str
+* some math expressions
 
 You can choose between Sino-Korean numbers (based on Korean's adopted Chinese characters, 한자), or Pure Korean numbers.
 
@@ -21,6 +27,12 @@ assert_eq!("만 이천삼백사십오", hangeul_from_string(String::from("12345"
 
 // Get Sino-Korean Hangeul from a BigInt
 assert_eq!("천극", hangeul_from_bigint(pow(BigInt::from(10), 51))),
+
+// Get Hangeul from a math expression (Sino-Korean only)
+assert_eq!("일 더하기 일", "hangeul_from_expression("1 + 1");
+
+// Get Hangeul from money (an f64 which gets truncated to 2 places) (Sino-Korean only)
+assert_eq!("일 점 일", "hangeul_from_money(1.1);
 ```
 
 ### About Korean Numbers
@@ -111,8 +123,25 @@ Wikipedia lists even higher groupings, but at different exponents...
 | 10^64 or 10^80 | 불가사의| 不可思議|
 | 10^68 or 10^88 | 무량대수| 無量大數|
 
-### Counters
-  -- see todo
+# Math Expressions
+
+The following math expressions are supported. When doing math, Sino-Korean numbers are used.
+
+```
+pub enum KoreanMathOp {
+    Add,
+    Divide,
+    Multiply,
+    Subtract,
+    Pow,
+    Fraction,
+    LessThan,
+    GreaterThan,
+    Equal,
+    NotEqual,
+    Log
+}
+```
 
 ### Further Reading
 
