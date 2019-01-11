@@ -1,4 +1,4 @@
-use utilities::{get_subject_marker, get_topic_marker};
+use crate::utilities::{get_subject_marker, get_topic_marker};
 
 pub enum Sign {
     Plus,

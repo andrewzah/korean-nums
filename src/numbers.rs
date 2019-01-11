@@ -1,5 +1,5 @@
 use num::{FromPrimitive, Integer};
-use parse;
+use crate::parse;
 
 pub enum NumberSystem{
     PureKorean,

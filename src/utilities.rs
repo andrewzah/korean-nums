@@ -1,4 +1,4 @@
-use errors::HangeulError;
+use crate::errors::HangeulError;
 
 const SYLLABLE_START: u32 = 0xAC00;
 const SYLLABLE_END: u32 = 0xD7AF;
@@ -21,7 +21,7 @@ pub fn get_topic_marker(s: &str) -> &str {
 fn ends_with_consonant(input: &str) -> Result<bool, HangeulError> {
     let c = ending_syllable(input).unwrap();
 
-    let char = try!(syllable_to_u32(c));
+    let char = syllable_to_u32(c)?;
     Ok((char - SYLLABLE_START) % 28 != 0)
 }
 

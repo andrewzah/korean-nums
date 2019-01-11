@@ -1,18 +1,18 @@
 extern crate num;
 
-mod numbers;
-mod place;
-mod block;
-mod parse;
-mod math;
-mod utilities;
 mod errors;
+mod block;
+mod math;
+mod numbers;
+mod parse;
+mod place;
+mod utilities;
 
-use math::{KoreanMathOp};
 use num::{BigInt, Integer, FromPrimitive};
-use numbers::{KoreanInteger};
+use crate::math::{KoreanMathOp};
+use crate::numbers::{KoreanInteger};
 
-pub use numbers::NumberSystem;
+pub use crate::numbers::NumberSystem;
 
 /// Parses an int into a Hangeul String.
 pub fn hangeul_from_int<T>(input: T, number_system: NumberSystem) -> String

@@ -1,9 +1,9 @@
-use numbers;
-use block;
-use place;
+use crate::numbers;
+use crate::block;
+use crate::place;
 
 use std::cmp::min;
-use math::{Sign};
+use crate::math::{Sign};
 
 pub fn parse_hangeul_sino(numbers: Vec<char>) -> String {
     let len = numbers.len() - 1;
