@@ -45,7 +45,7 @@ pub fn hangeul_from_money(input: f64) -> String
             NumberSystem::SinoKorean);
     let right_side =
         hangeul_from_int(
-            numbers[1].parse::<i8>().unwrap(),
+            numbers[1].parse::<i16>().unwrap(),
             NumberSystem::SinoKorean);
 
     format!("{} 점 {}", left_side, right_side)

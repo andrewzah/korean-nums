@@ -33,6 +33,10 @@ pub fn parse_hangeul_sino(numbers: Vec<char>) -> String {
             zeroes += idx;
 
             if let Some(block) = block::Block::from_usize(zeroes) {
+                // special edge case for 만...
+                if idx == len-1 && output.chars().collect::<Vec<char>>()[0] != ' ' && block.to_str() == "만" {
+                    output.push(' ');
+                }
                 output.push_str(block.to_str());
                 if num != 1 {
                     output.push_str(num.to_str());
