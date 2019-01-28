@@ -6,6 +6,7 @@ use std::cmp::min;
 use crate::math::{Sign};
 
 pub fn parse_hangeul_sino(numbers: Vec<char>) -> String {
+    println!("new num");
     let len = numbers.len() - 1;
     let mut output = String::new();
     let mut iter = numbers.iter().enumerate().peekable();
@@ -73,6 +74,7 @@ pub fn parse_hangeul_sino(numbers: Vec<char>) -> String {
                     if output.len() > 2 {
                         let chars = output.chars().rev().collect::<String>();
                         if chars[3..6] != *"만" {
+                            output.push(' ');
                             output.push_str(block.to_str());
                         }
                     } else {
@@ -103,6 +105,7 @@ pub fn parse_hangeul_sino(numbers: Vec<char>) -> String {
             },
             _ => {
                 if mut_idx != 0 {
+                    println!("bottom reached");
                     let block = block::Block::from_usize(mut_idx)
                         .expect("Block counter doesn't go high enough for this...");
                     output.push_str(&block.to_str_with_space());
