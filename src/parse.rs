@@ -49,9 +49,10 @@ pub fn parse_hangeul_sino(numbers: Vec<char>) -> String {
                         }
                     }
 
-                    if num != 1 && mut_idx != len - 1 && output != "" {
-                        output.push(' ');
-                    } 
+                }
+
+                if num != 1 && mut_idx != len - 1 && output != "" {
+                    output.push(' ');
                 }
                 output.push_str(block.to_str());
 
