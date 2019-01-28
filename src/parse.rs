@@ -33,12 +33,13 @@ pub fn parse_hangeul_sino(numbers: Vec<char>) -> String {
             zeroes += idx;
 
             if let Some(block) = block::Block::from_usize(zeroes) {
-                // special edge case for 만...
+                // special edge case for 만
                 if idx == len-1 && output.chars().collect::<Vec<char>>()[0] != ' ' && block.to_str() == "만" {
                     output.push(' ');
                 }
                 output.push_str(block.to_str());
-                if num != 1 {
+
+                if num != 1 || block.to_str() != "만" {
                     output.push_str(num.to_str());
                 }
                 continue;
@@ -75,7 +76,7 @@ pub fn parse_hangeul_sino(numbers: Vec<char>) -> String {
                     let block = block::Block::from_usize(idx)
                         .expect("Block counter doesn't go high enough for this...");
                     output.push_str(&block.to_str_with_space());
-                    if num != 1 || remaining > 0 {
+                    if num != 1 || block.to_str() != "만" || remaining > 0 {
                         output.push_str(num.to_str());
                     }
                 } else {
@@ -97,7 +98,6 @@ pub fn parse_hangeul_pure(numbers: Vec<char>) -> String {
             (0, '0') => {
                 if let Some((_, next_num)) = iter.peek() {
                     let new_input = format!("{}{}", next_num, "0");
-                    println!("{}", new_input);
                     let num = numbers::KoreanNumberPure::from_str(&new_input).unwrap();
 
                     output.push_str(num.to_str());

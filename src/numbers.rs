@@ -31,8 +31,8 @@ where I: Copy + ToString + Integer + FromPrimitive {
                 if self.value > FromPrimitive::from_i8(99).unwrap() {
                     panic!("Pure korean numbers only go up to 99.");
                 }
-                if self.value < FromPrimitive::from_i8(0).unwrap() {
-                    panic!("Input cannot be negative.")
+                if self.value < FromPrimitive::from_i8(1).unwrap() {
+                    panic!("Input cannot be 0 or negative.")
                 }
             },
             NumberSystem::SinoKorean => {},
@@ -188,7 +188,6 @@ impl KoreanNumberSino {
 }
 
 pub enum KoreanNumberPure {
-    Zero,
     One,
     Two,
     Three,
@@ -212,7 +211,6 @@ pub enum KoreanNumberPure {
 impl KoreanNumberPure {
     pub fn from_char(c: &char) -> Option<KoreanNumberPure> {
         match c {
-            '0' => Some(KoreanNumberPure::Zero),
             '1' => Some(KoreanNumberPure::One),
             '2' => Some(KoreanNumberPure::Two),
             '3' => Some(KoreanNumberPure::Three),
@@ -243,7 +241,6 @@ impl KoreanNumberPure {
 
     pub fn to_str(&self) -> &str {
         match self {
-            &KoreanNumberPure::Zero => "공",
             &KoreanNumberPure::One => "하나",
             &KoreanNumberPure::Two => "둘",
             &KoreanNumberPure::Three => "셋",
