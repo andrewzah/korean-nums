@@ -1,6 +1,8 @@
+[![builds.sr.ht status](https://builds.sr.ht/~andrewzah/korean_numbers.svg)](https://builds.sr.ht/~andrewzah/korean_numbers?)
+
 ## note!
 
-For 0.6, this crate is going under a substantial re-write. The API is likely to change.
+At some point before 1.0, this crate is likely going under a moderate re-write.
 
 ## Korean Numbers
 
