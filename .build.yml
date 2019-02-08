@@ -1,0 +1,11 @@
+image: alpine/edge
+packages:
+  - libgcc
+  - rust
+  - cargo
+sources:
+  - https://git.sr.ht/~andrewzah/korean_numbers/
+tasks:
+  - test: |
+      cd korean_numbers
+      cargo test
