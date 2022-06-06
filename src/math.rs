@@ -2,7 +2,7 @@ use crate::utilities::{get_subject_marker, get_topic_marker};
 
 pub enum Sign {
     Plus,
-    Minus
+    Minus,
 }
 
 impl Sign {
@@ -10,14 +10,14 @@ impl Sign {
         match c {
             '+' => Some(Sign::Plus),
             '-' => Some(Sign::Minus),
-            _ => None
+            _ => None,
         }
     }
 
     pub fn to_str(&self) -> &str {
         match self {
             &Sign::Plus => "플러스 ",
-            &Sign::Minus => "마이너스 "
+            &Sign::Minus => "마이너스 ",
         }
     }
 
@@ -26,6 +26,7 @@ impl Sign {
     }
 }
 
+#[allow(dead_code)]
 pub enum KoreanMathOp {
     Add,
     Divide,
@@ -37,7 +38,7 @@ pub enum KoreanMathOp {
     GreaterThan,
     Equal,
     NotEqual,
-    Log
+    Log,
 }
 
 impl KoreanMathOp {
@@ -53,7 +54,7 @@ impl KoreanMathOp {
             "=" => Some(KoreanMathOp::Equal),
             "!=" | "<>" | "=/=" => Some(KoreanMathOp::NotEqual),
             "log" => Some(KoreanMathOp::Log),
-            _ => None
+            _ => None,
         }
     }
 
@@ -64,19 +65,15 @@ impl KoreanMathOp {
             .replace("{2}", right_num);
 
         match self {
-            &KoreanMathOp::LessThan |
-            &KoreanMathOp::GreaterThan |
-            &KoreanMathOp::Equal => {
+            &KoreanMathOp::LessThan | &KoreanMathOp::GreaterThan | &KoreanMathOp::Equal => {
                 return new_str.replace("{3}", get_topic_marker(left_num))
-            },
+            }
             &KoreanMathOp::NotEqual => {
                 return new_str
                     .replace("{3}", get_topic_marker(left_num))
                     .replace("{4}", get_subject_marker(right_num))
-            },
-            _ => {
-                return new_str
             }
+            _ => return new_str,
         }
     }
 

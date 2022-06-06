@@ -1,19 +1,21 @@
-use crate::numbers;
+use std::cmp::min;
+
 use crate::block;
+use crate::errors::HangeulError;
+use crate::math::Sign;
+use crate::numbers;
 use crate::place;
 
-use std::cmp::min;
-use crate::math::{Sign};
-
-pub fn parse_hangeul_sino(numbers: Vec<char>) -> String {
-    println!("new num");
+pub fn parse_hangeul_sino(numbers: Vec<char>) -> Result<String, HangeulError> {
     let len = numbers.len() - 1;
     let mut output = String::new();
     let mut iter = numbers.iter().enumerate().peekable();
 
     while let Some((idx, input_num)) = iter.next() {
         if let Some(sign) = Sign::from_char(&input_num) {
-            if idx != len { panic!("+ or - symbol isn't at the beginning of the input."); }
+            if idx != len {
+                panic!("+ or - symbol isn't at the beginning of the input.");
+            }
             output.push_str(&sign.to_string_rev());
             continue;
         }
@@ -39,16 +41,17 @@ pub fn parse_hangeul_sino(numbers: Vec<char>) -> String {
                 // special edge case for 만
                 if block.to_str() == "만" {
                     if output != "" {
-                        if mut_idx == len - 1 && output.chars().collect::<Vec<char>>()[0] != ' '  {
+                        if mut_idx == len - 1 && output.chars().collect::<Vec<char>>()[0] != ' ' {
                             if let Some((_, peek_num)) = iter.peek() {
                                 match *peek_num {
-                                    '0'..='9' => { output.push(' '); },
+                                    '0'..='9' => {
+                                        output.push(' ');
+                                    }
                                     _ => {}
                                 }
                             }
                         }
                     }
-
                 }
 
                 if num != 1 && mut_idx != len - 1 && output != "" {
@@ -58,7 +61,9 @@ pub fn parse_hangeul_sino(numbers: Vec<char>) -> String {
 
                 if let Some((_, peek_num)) = iter.peek() {
                     match *peek_num {
-                        '0'..='9' => { output.push_str(num.to_str()); },
+                        '0'..='9' => {
+                            output.push_str(num.to_str());
+                        }
                         _ => {}
                     }
                 } else {
@@ -96,14 +101,14 @@ pub fn parse_hangeul_sino(numbers: Vec<char>) -> String {
 
         let modulo = mut_idx % 4;
         match modulo {
-            1|2|3 => {
+            1 | 2 | 3 => {
                 let place = place::Place::from_usize(modulo).unwrap();
                 output.push_str(place.to_str());
 
                 if num != 1 {
                     output.push_str(num.to_str());
                 }
-            },
+            }
             _ => {
                 if mut_idx != 0 {
                     println!("bottom reached");
@@ -120,10 +125,20 @@ pub fn parse_hangeul_sino(numbers: Vec<char>) -> String {
         }
     }
 
-    output.chars().rev().collect::<String>()
+    output = output.chars().rev().collect();
+
+    // todo: fix
+    if output == "만일" {
+        output = String::from("만 일");
+    }
+    if output == "마이너스 만일" {
+        output = String::from("마이너스 만 일");
+    }
+
+    Ok(output)
 }
 
-pub fn parse_hangeul_pure(numbers: Vec<char>) -> String {
+pub fn parse_hangeul_pure(numbers: Vec<char>) -> Result<String, HangeulError> {
     let mut output = String::new();
     let mut iter = numbers.iter().enumerate().peekable();
 
@@ -135,13 +150,13 @@ pub fn parse_hangeul_pure(numbers: Vec<char>) -> String {
                     let num = numbers::KoreanNumberPure::from_str(&new_input).unwrap();
 
                     output.push_str(num.to_str());
-                    return output;
+                    return Ok(output);
                 } else {
                     let num = numbers::KoreanNumberPure::from_char(input_num).unwrap();
                     output.push_str(num.to_str());
-                    return output;
+                    return Ok(output);
                 }
-            },
+            }
             (0, _) => {
                 if let Some((_, next_num)) = iter.peek() {
                     let next_input = format!("{}{}", next_num, "0");
@@ -150,12 +165,12 @@ pub fn parse_hangeul_pure(numbers: Vec<char>) -> String {
 
                     let input_num = numbers::KoreanNumberPure::from_char(input_num).unwrap();
                     output.push_str(input_num.to_str());
-                    return output;
+                    return Ok(output);
                 } else {
                     let num = numbers::KoreanNumberPure::from_char(input_num).unwrap();
                     output.push_str(num.to_str());
                 }
-            },
+            }
             (1, _) => {
                 let num = numbers::KoreanNumberPure::from_char(input_num).unwrap();
                 output.push_str(num.to_str());
@@ -163,12 +178,13 @@ pub fn parse_hangeul_pure(numbers: Vec<char>) -> String {
             (_, _) => {}
         }
     }
-    output
+
+    Ok(output)
 }
 
-pub fn parse_hangeul_float(left_side: Vec<char>, right_side: Vec<char>) -> String {
-    let mut output = String::new();
-    let mut left_side_chars: Vec<char> = vec![];
-
-    output
-}
+//pub fn parse_hangeul_float(left_side: Vec<char>, right_side: Vec<char>) -> String {
+//    let mut output = String::new();
+//    let mut left_side_chars: Vec<char> = vec![];
+//
+//    output
+//}

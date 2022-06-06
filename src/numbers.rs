@@ -1,20 +1,25 @@
 use num::{FromPrimitive, Integer};
+
+use crate::errors::HangeulError;
 use crate::parse;
 
-pub enum NumberSystem{
+pub enum NumberSystem {
     PureKorean,
-    SinoKorean
+    SinoKorean,
 }
 
-
 pub struct KoreanInteger<I>
-where I: Copy + ToString + Integer + FromPrimitive {
+where
+    I: Copy + ToString + Integer + FromPrimitive,
+{
     pub value: I,
     pub num_system: NumberSystem,
 }
 
-impl <I> KoreanInteger<I>
-where I: Copy + ToString + Integer + FromPrimitive {
+impl<I> KoreanInteger<I>
+where
+    I: Copy + ToString + Integer + FromPrimitive,
+{
     pub fn from_int(value: I, num_system: NumberSystem) -> KoreanInteger<I> {
         let integer = KoreanInteger {
             value: value,
@@ -34,27 +39,23 @@ where I: Copy + ToString + Integer + FromPrimitive {
                 if self.value < FromPrimitive::from_i8(1).unwrap() {
                     panic!("Input cannot be 0 or negative.")
                 }
-            },
-            NumberSystem::SinoKorean => {},
+            }
+            NumberSystem::SinoKorean => {}
         }
     }
 
-    pub fn get_hangeul(&self) -> String {
+    pub fn get_hangeul(&self) -> Result<String, HangeulError> {
         let prepared_input = self.prepare_input();
 
         match self.num_system {
-            NumberSystem::PureKorean => {
-                parse::parse_hangeul_pure(prepared_input)
-            },
-            NumberSystem::SinoKorean => {
-                parse::parse_hangeul_sino(prepared_input)
-            }
+            NumberSystem::PureKorean => parse::parse_hangeul_pure(prepared_input),
+            NumberSystem::SinoKorean => parse::parse_hangeul_sino(prepared_input),
         }
     }
 
-    fn prepare_input(&self) -> Vec<char>
-    {
-        let nums = self.value
+    fn prepare_input(&self) -> Vec<char> {
+        let nums = self
+            .value
             .to_string()
             .replace(",", "")
             .chars()
@@ -78,11 +79,13 @@ pub enum KoreanNumberSino {
     Nine,
 }
 
+#[allow(dead_code)]
 pub enum EndingType {
     Vowel,
-    Consonant
+    Consonant,
 }
 
+#[allow(dead_code)]
 impl EndingType {
     pub fn subject_particle(&self) -> &str {
         match self {
@@ -118,7 +121,7 @@ impl KoreanNumberSino {
             '7' => Some(KoreanNumberSino::Seven),
             '8' => Some(KoreanNumberSino::Eight),
             '9' => Some(KoreanNumberSino::Nine),
-            _ => None
+            _ => None,
         }
     }
 
@@ -152,22 +155,22 @@ impl KoreanNumberSino {
         }
     }
 
+    #[allow(dead_code)]
     pub fn ending_type(&self) -> EndingType {
         match self {
-            &KoreanNumberSino::Zero   => EndingType::Consonant,
-            &KoreanNumberSino::One    => EndingType::Consonant,
-            &KoreanNumberSino::Two    => EndingType::Vowel,
-            &KoreanNumberSino::Three  => EndingType::Consonant,
-            &KoreanNumberSino::Four   => EndingType::Vowel,
-            &KoreanNumberSino::Five   => EndingType::Vowel,
-            &KoreanNumberSino::Six    => EndingType::Consonant,
-            &KoreanNumberSino::Seven  => EndingType::Consonant,
-            &KoreanNumberSino::Eight  => EndingType::Consonant,
-            &KoreanNumberSino::Nine   => EndingType::Vowel,
+            &KoreanNumberSino::Zero => EndingType::Consonant,
+            &KoreanNumberSino::One => EndingType::Consonant,
+            &KoreanNumberSino::Two => EndingType::Vowel,
+            &KoreanNumberSino::Three => EndingType::Consonant,
+            &KoreanNumberSino::Four => EndingType::Vowel,
+            &KoreanNumberSino::Five => EndingType::Vowel,
+            &KoreanNumberSino::Six => EndingType::Consonant,
+            &KoreanNumberSino::Seven => EndingType::Consonant,
+            &KoreanNumberSino::Eight => EndingType::Consonant,
+            &KoreanNumberSino::Nine => EndingType::Vowel,
             //&KoreanNumberSino::Ten    => EndingType::Consonant,
         }
     }
-
 
     #[allow(dead_code)]
     pub fn to_hanja(&self) -> &str {
@@ -220,7 +223,7 @@ impl KoreanNumberPure {
             '7' => Some(KoreanNumberPure::Seven),
             '8' => Some(KoreanNumberPure::Eight),
             '9' => Some(KoreanNumberPure::Nine),
-            _ => None
+            _ => None,
         }
     }
 
@@ -235,7 +238,7 @@ impl KoreanNumberPure {
             "70" => Some(KoreanNumberPure::Seventy),
             "80" => Some(KoreanNumberPure::Eighty),
             "90" => Some(KoreanNumberPure::Ninety),
-            _ => None
+            _ => None,
         }
     }
 

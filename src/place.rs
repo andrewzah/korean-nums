@@ -1,7 +1,7 @@
 pub enum Place {
     Tens,
     Hundreds,
-    Thousands
+    Thousands,
 }
 
 impl Place {

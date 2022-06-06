@@ -1,14 +1,11 @@
-extern crate num;
 extern crate korean_nums;
+extern crate num;
 
-use num::{pow, Float, BigInt};
 use korean_nums::{
+    hangeul_from_bigint, hangeul_from_expression, hangeul_from_int, hangeul_from_float,
     NumberSystem,
-    hangeul_from_expression,
-    hangeul_from_money,
-    hangeul_from_int,
-    hangeul_from_bigint
 };
+use num::{pow, BigInt, Float};
 
 // -----------
 // Pure Korean
@@ -29,7 +26,7 @@ fn it_handles_zero_through_nine_korean() {
     ];
 
     for (input, expected) in testcases {
-        assert_eq!(expected, hangeul_from_int(input, NumberSystem::PureKorean));
+        assert_eq!(expected, hangeul_from_int(input, NumberSystem::PureKorean).unwrap());
     }
 }
 
@@ -129,7 +126,7 @@ fn it_handles_ten_through_ninety_nine_pure() {
     ];
 
     for (input, expected) in testcases {
-        assert_eq!(expected, hangeul_from_int(input, NumberSystem::PureKorean));
+        assert_eq!(expected, hangeul_from_int(input, NumberSystem::PureKorean).unwrap());
     }
 }
 
@@ -140,171 +137,194 @@ fn it_handles_ten_through_ninety_nine_pure() {
 #[test]
 fn it_handles_mixed_digits_zeroes_sino() {
     let testcases: Vec<(u64, &str)> = vec![
-        (1             ,  "일"),
-        (100           ,  "백"),
-        (101           ,  "백일"),
-        (108           ,  "백팔"),
-        (120           ,  "백이십"),
-        (1001          ,  "천일"),
-        (1_0001        ,  "만 일"),
-        (2_0037        ,  "이만 삼십칠"),
-        (7_0007        ,  "칠만 칠"),
-        (5_0808        ,  "오만 팔백팔"),
-        (9_0000        ,  "구만"),
-        (9_9000        ,  "구만 구천"),
-        (12_0000       ,  "십이만"),
-        (12_0001       ,  "십이만 일"),
-        (81_0652       ,  "팔십일만 육백오십이"),
-        (2044_355      ,  "이백사만 사천삼백오십오"),
-        (8300_0000     ,  "팔천삼백만"),
-        (8375_2000     ,  "팔천삼백칠십오만 이천"),
-        (8001_9459     ,  "팔천일만 구천사백오십구"),
-        (5_0337_9569   ,  "오억 삼백삼십칠만 구천오백육십구"),
-        (5_0337_9570   ,  "오억 삼백삼십칠만 구천오백칠십"),
-        (10_0110_2120  ,  "십억 백십만 이천백이십"),
-        (11_3960_3741 ,   "십일억 삼천구백육십만 삼천칠백사십일"),
-        (14_2108_6610  ,  "십사억 이천백팔만 육천육백십"),
-        (132_5964_2032 ,  "백삼십이억 오천구백육십사만 이천삼십이")
+        (1, "일"),
+        (100, "백"),
+        (101, "백일"),
+        (108, "백팔"),
+        (120, "백이십"),
+        (1001, "천일"),
+        (1_0001, "만 일"),
+        (2_0037, "이만 삼십칠"),
+        (7_0007, "칠만 칠"),
+        (5_0808, "오만 팔백팔"),
+        (9_0000, "구만"),
+        (9_9000, "구만 구천"),
+        (12_0000, "십이만"),
+        (12_0001, "십이만 일"),
+        (81_0652, "팔십일만 육백오십이"),
+        (2044_355, "이백사만 사천삼백오십오"),
+        (8300_0000, "팔천삼백만"),
+        (8375_2000, "팔천삼백칠십오만 이천"),
+        (8001_9459, "팔천일만 구천사백오십구"),
+        (5_0337_9569, "오억 삼백삼십칠만 구천오백육십구"),
+        (5_0337_9570, "오억 삼백삼십칠만 구천오백칠십"),
+        (10_0110_2120, "십억 백십만 이천백이십"),
+        (11_3960_3741, "십일억 삼천구백육십만 삼천칠백사십일"),
+        (14_2108_6610, "십사억 이천백팔만 육천육백십"),
+        (132_5964_2032, "백삼십이억 오천구백육십사만 이천삼십이"),
     ];
 
     for &(input, expected) in testcases.iter() {
-        assert_eq!(expected, hangeul_from_int(input, NumberSystem::SinoKorean));
+        assert_eq!(expected, hangeul_from_int(input, NumberSystem::SinoKorean).unwrap());
     }
 }
 
 #[test]
-fn it_handles_digits_sino(){
+fn it_handles_digits_sino() {
     let testcases: Vec<(u64, &str)> = vec![
-        (4                   ,  "사"),
-        (12                  ,  "십이"),
-        (123                 ,  "백이십삼"),
-        (1234                ,  "천이백삼십사"),
-        (6365                ,  "육천삼백육십오"),
-        (1_2345              ,  "만 이천삼백사십오"),
-        (12_3456             ,  "십이만 삼천사백오십육"),
-        (123_4567            ,  "백이십삼만 사천오백육십칠"),
-        (1234_5678           ,  "천이백삼십사만 오천육백칠십팔"),
-        (5356_5453           ,  "오천삼백오십육만 오천사백오십삼"),
-        (9999_9999           ,  "구천구백구십구만 구천구백구십구"),
-        (1_2345_6789         ,  "일억 이천삼백사십오만 육천칠백팔십구"),
-        (12_3456_7891        ,  "십이억 삼천사백오십육만 칠천팔백구십일"),
-        (123_4567_8912       ,  "백이십삼억 사천오백육십칠만 팔천구백십이"),
-        (1234_5678_9123      ,  "천이백삼십사억 오천육백칠십팔만 구천백이십삼"),
-        (9999_9999_9999      ,  "구천구백구십구억 구천구백구십구만 구천구백구십구"),
-        (1_2345_6789_1234    ,  "일조 이천삼백사십오억 육천칠백팔십구만 천이백삼십사"),
-        (3_5434_5463_2455    ,  "삼조 오천사백삼십사억 오천사백육십삼만 이천사백오십오"),
-        (12_3456_7891_2345   ,  "십이조 삼천사백오십육억 칠천팔백구십일만 이천삼백사십오"),
-        (123_4567_8912_3456  ,  "백이십삼조 사천오백육십칠억 팔천구백십이만 삼천사백오십육"),
-        (1234_5678_9123_4567 ,  "천이백삼십사조 오천육백칠십팔억 구천백이십삼만 사천오백육십칠"),
-        (9999_9999_9999_9999 ,  "구천구백구십구조 구천구백구십구억 구천구백구십구만 구천구백구십구"),
+        (4, "사"),
+        (12, "십이"),
+        (123, "백이십삼"),
+        (1234, "천이백삼십사"),
+        (6365, "육천삼백육십오"),
+        (1_2345, "만 이천삼백사십오"),
+        (12_3456, "십이만 삼천사백오십육"),
+        (123_4567, "백이십삼만 사천오백육십칠"),
+        (1234_5678, "천이백삼십사만 오천육백칠십팔"),
+        (5356_5453, "오천삼백오십육만 오천사백오십삼"),
+        (9999_9999, "구천구백구십구만 구천구백구십구"),
+        (1_2345_6789, "일억 이천삼백사십오만 육천칠백팔십구"),
+        (12_3456_7891, "십이억 삼천사백오십육만 칠천팔백구십일"),
+        (123_4567_8912, "백이십삼억 사천오백육십칠만 팔천구백십이"),
+        (
+            1234_5678_9123,
+            "천이백삼십사억 오천육백칠십팔만 구천백이십삼",
+        ),
+        (
+            9999_9999_9999,
+            "구천구백구십구억 구천구백구십구만 구천구백구십구",
+        ),
+        (
+            1_2345_6789_1234,
+            "일조 이천삼백사십오억 육천칠백팔십구만 천이백삼십사",
+        ),
+        (
+            3_5434_5463_2455,
+            "삼조 오천사백삼십사억 오천사백육십삼만 이천사백오십오",
+        ),
+        (
+            12_3456_7891_2345,
+            "십이조 삼천사백오십육억 칠천팔백구십일만 이천삼백사십오",
+        ),
+        (
+            123_4567_8912_3456,
+            "백이십삼조 사천오백육십칠억 팔천구백십이만 삼천사백오십육",
+        ),
+        (
+            1234_5678_9123_4567,
+            "천이백삼십사조 오천육백칠십팔억 구천백이십삼만 사천오백육십칠",
+        ),
+        (
+            9999_9999_9999_9999,
+            "구천구백구십구조 구천구백구십구억 구천구백구십구만 구천구백구십구",
+        ),
     ];
 
     for (input, expected) in testcases {
-        assert_eq!(expected, hangeul_from_int(input, NumberSystem::SinoKorean));
+        assert_eq!(expected, hangeul_from_int(input, NumberSystem::SinoKorean).unwrap());
     }
 }
 
 #[test]
 fn it_handles_zeroes_sino() {
     let testcases: Vec<(&str, u128)> = vec![
-        ("십"    ,  10),
-        ("백"    ,  100),
-        ("천"    ,  1000),
-        ("만"    ,  1_0000),
-        ("십만"  ,  10_0000),
-        ("백만"  ,  100_0000),
-        ("천만"  ,  1000_0000),
-        ("일억"  ,  1_0000_0000),
-        ("십억"  ,  pow(10u128, 9)),
-        ("백억"  ,  pow(10u128, 10)),
-        ("천억"  ,  pow(10u128, 11)),
-        ("일조"  ,  pow(10u128, 12)),
-        ("십조"  ,  pow(10u128, 13)),
-        ("백조"  ,  pow(10u128, 14)),
-        ("천조"  ,  pow(10u128, 15)),
-        ("일경"  ,  pow(10u128, 16)),
-        ("십경"  ,  pow(10u128, 17)),
-        ("백경"  ,  pow(10u128, 18)),
-        ("천경"  ,  pow(10u128, 19)),
-        ("일해"  ,  pow(10u128, 20)),
-        ("십해"  ,  pow(10u128, 21)),
-        ("백해"  ,  pow(10u128, 22)),
-        ("천해"  ,  pow(10u128, 23)),
-        ("일자"  ,  pow(10u128, 24)),
-        ("십자"  ,  pow(10u128, 25)),
-        ("백자"  ,  pow(10u128, 26)),
-        ("천자"  ,  pow(10u128, 27)),
-        ("일양"  ,  pow(10u128, 28)),
-        ("십양"  ,  pow(10u128, 29)),
-        ("백양"  ,  pow(10u128, 30)),
-        ("천양"  ,  pow(10u128, 31)),
-        ("일구"  ,  pow(10u128, 32)),
-        ("십구"  ,  pow(10u128, 33)),
-        ("백구"  ,  pow(10u128, 34)),
-        ("천구"  ,  pow(10u128, 35)),
-        ("일간"  ,  pow(10u128, 36)),
-        ("십간"  ,  pow(10u128, 37)),
-        ("백간"  ,  pow(10u128, 38)),
+        ("십", 10),
+        ("백", 100),
+        ("천", 1000),
+        ("만", 1_0000),
+        ("십만", 10_0000),
+        ("백만", 100_0000),
+        ("천만", 1000_0000),
+        ("일억", 1_0000_0000),
+        ("십억", pow(10u128, 9)),
+        ("백억", pow(10u128, 10)),
+        ("천억", pow(10u128, 11)),
+        ("일조", pow(10u128, 12)),
+        ("십조", pow(10u128, 13)),
+        ("백조", pow(10u128, 14)),
+        ("천조", pow(10u128, 15)),
+        ("일경", pow(10u128, 16)),
+        ("십경", pow(10u128, 17)),
+        ("백경", pow(10u128, 18)),
+        ("천경", pow(10u128, 19)),
+        ("일해", pow(10u128, 20)),
+        ("십해", pow(10u128, 21)),
+        ("백해", pow(10u128, 22)),
+        ("천해", pow(10u128, 23)),
+        ("일자", pow(10u128, 24)),
+        ("십자", pow(10u128, 25)),
+        ("백자", pow(10u128, 26)),
+        ("천자", pow(10u128, 27)),
+        ("일양", pow(10u128, 28)),
+        ("십양", pow(10u128, 29)),
+        ("백양", pow(10u128, 30)),
+        ("천양", pow(10u128, 31)),
+        ("일구", pow(10u128, 32)),
+        ("십구", pow(10u128, 33)),
+        ("백구", pow(10u128, 34)),
+        ("천구", pow(10u128, 35)),
+        ("일간", pow(10u128, 36)),
+        ("십간", pow(10u128, 37)),
+        ("백간", pow(10u128, 38)),
     ];
 
     for (expected, input) in testcases {
-        assert_eq!(expected, hangeul_from_int(input, NumberSystem::SinoKorean));
+        assert_eq!(expected, hangeul_from_int(input, NumberSystem::SinoKorean).unwrap());
     }
 }
 
 #[test]
 fn it_handles_big_zeroes_sino() {
     let testcases: Vec<(&str, BigInt)> = vec![
-        ("천간"  ,  pow(BigInt::from(10), 39)),
-        ("일정"  ,  pow(BigInt::from(10), 40)),
-        ("십정"  ,  pow(BigInt::from(10), 41)),
-        ("백정"  ,  pow(BigInt::from(10), 42)),
-        ("천정"  ,  pow(BigInt::from(10), 43)),
-        ("일재"  ,  pow(BigInt::from(10), 44)),
-        ("십재"  ,  pow(BigInt::from(10), 45)),
-        ("백재"  ,  pow(BigInt::from(10), 46)),
-        ("천재"  ,  pow(BigInt::from(10), 47)),
-        ("일극"  ,  pow(BigInt::from(10), 48)),
-        ("십극"  ,  pow(BigInt::from(10), 49)),
-        ("백극"  ,  pow(BigInt::from(10), 50)),
-        ("천극"  ,  pow(BigInt::from(10), 51)),
+        ("천간", pow(BigInt::from(10), 39)),
+        ("일정", pow(BigInt::from(10), 40)),
+        ("십정", pow(BigInt::from(10), 41)),
+        ("백정", pow(BigInt::from(10), 42)),
+        ("천정", pow(BigInt::from(10), 43)),
+        ("일재", pow(BigInt::from(10), 44)),
+        ("십재", pow(BigInt::from(10), 45)),
+        ("백재", pow(BigInt::from(10), 46)),
+        ("천재", pow(BigInt::from(10), 47)),
+        ("일극", pow(BigInt::from(10), 48)),
+        ("십극", pow(BigInt::from(10), 49)),
+        ("백극", pow(BigInt::from(10), 50)),
+        ("천극", pow(BigInt::from(10), 51)),
     ];
 
     for (expected, input) in testcases {
-        assert_eq!(expected, hangeul_from_bigint(input));
+        assert_eq!(expected, hangeul_from_bigint(input).unwrap());
     }
 }
 
 #[test]
-fn it_handles_mixed_digits_zeroes_money()
-{
+fn it_handles_mixed_digits_floats() {
     let testcases: Vec<(f64, &str)> = vec![
-        (1.1         , "일 점 일"),
-        (2.3         , "이 점 삼"),
-        (1001.03     , "천일 점 영삼"),
-        (1_0001.03   , "만 일 점 영삼"),
-        (1001.030000 , "천일 점 영삼"),
+        (1.1, "일 점 일"),
+        (2.3, "이 점 삼"),
+        (1001.03, "천일 점 영삼"),
+        (1_0001.03, "만 일 점 영삼"),
+        (1001.030000, "천일 점 영삼"),
     ];
 
     for &(input, expected) in testcases.iter() {
-        assert_eq!(expected, hangeul_from_money(input));
+        assert_eq!(expected, hangeul_from_float(input).unwrap());
     }
 }
 
 #[test]
 fn it_handles_mixed_digits_zeroes_negative() {
     let testcases: Vec<(i32, &str)> = vec![
-        (-1      ,  "마이너스 일"),
-        (-100    ,  "마이너스 백"),
-        (-101    ,  "마이너스 백일"),
-        (-108    ,  "마이너스 백팔"),
-        (-120    ,  "마이너스 백이십"),
-        (-1001   ,  "마이너스 천일"),
-        (-1_0001 ,  "마이너스 만 일"),
+        (-1, "마이너스 일"),
+        (-100, "마이너스 백"),
+        (-101, "마이너스 백일"),
+        (-108, "마이너스 백팔"),
+        (-120, "마이너스 백이십"),
+        (-1001, "마이너스 천일"),
+        (-1_0001, "마이너스 만 일"),
     ];
 
     for &(input, expected) in testcases.iter() {
-        assert_eq!(expected, hangeul_from_int(input, NumberSystem::SinoKorean));
+        assert_eq!(expected, hangeul_from_int(input, NumberSystem::SinoKorean).unwrap());
     }
 }
 
@@ -323,7 +343,7 @@ fn it_handles_math_expressions() {
     ];
 
     for &(input, expected) in testcases.iter() {
-        assert_eq!(expected, hangeul_from_expression(input));
+        assert_eq!(expected, hangeul_from_expression(input).unwrap());
     }
 }
 
@@ -356,23 +376,23 @@ fn it_determines_vowels() {
 //#[test]
 fn math_operators() {
     let testcases = vec![
-        ("1+3"   ,  ""),
-        ("1-3"   ,  ""),
-        ("1/3"   ,  ""),
-        ("1*3"   ,  ""),
-        ("1^3"   ,  ""),
-        ("1^3"   ,  ""),
-        ("1/3"   ,  ""),
-        ("1<3"   ,  ""),
-        ("1>3"   ,  ""),
-        ("1<=3"  ,  ""),
-        ("1>=3"  ,  ""),
-        ("1=3"   ,  ""),
-        ("1=3"   ,  ""),
-        ("1!=3"  ,  ""),
-        ("1=3"   ,  ""),
-        ("1<>3"  ,  ""),
-        ("1=/=3" ,  ""),
-        ("1log3" ,  ""),
+        ("1+3", ""),
+        ("1-3", ""),
+        ("1/3", ""),
+        ("1*3", ""),
+        ("1^3", ""),
+        ("1^3", ""),
+        ("1/3", ""),
+        ("1<3", ""),
+        ("1>3", ""),
+        ("1<=3", ""),
+        ("1>=3", ""),
+        ("1=3", ""),
+        ("1=3", ""),
+        ("1!=3", ""),
+        ("1=3", ""),
+        ("1<>3", ""),
+        ("1=/=3", ""),
+        ("1log3", ""),
     ];
 }

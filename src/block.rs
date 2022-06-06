@@ -28,7 +28,7 @@ impl Block {
             40 => Some(Block::Jeong),
             44 => Some(Block::Jae),
             48 => Some(Block::Geug),
-            _ => None
+            _ => None,
         }
     }
 
